@@ -29,11 +29,13 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
 .header-sub{font-size:0.78em;opacity:0.5;margin-top:4px;}
 .section-divider{text-align:center;color:rgba(255,255,255,0.5);font-size:0.82em;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:15px 0 5px;border-top:1px solid rgba(255,255,255,0.1);margin-top:10px;}
 .report-card{background:rgba(255,255,255,0.97);border-radius:22px;padding:26px;margin:15px 0;box-shadow:0 12px 40px rgba(0,0,0,0.25);}
+.report-card.live-entry{border-top:4px solid #2ed573;}
 .report-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f0f0f5;padding-bottom:15px;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
 .report-date{font-size:1.2em;font-weight:800;color:#1a1a2e;}
-.badges{display:flex;gap:8px;align-items:center;}
+.badges{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .nurse-badge{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:6px 15px;border-radius:20px;font-size:0.82em;font-weight:600;}
 .shift-badge{background:rgba(102,126,234,0.15);color:#667eea;padding:4px 12px;border-radius:20px;font-size:0.75em;font-weight:600;}
+.new-badge{background:#2ed573;color:#fff;padding:4px 10px;border-radius:20px;font-size:0.72em;font-weight:700;}
 .condition-banner{text-align:center;padding:12px 20px;border-radius:14px;font-size:1em;font-weight:700;margin-bottom:18px;}
 .cond-good{background:#d4edda;color:#155724;}
 .cond-fair{background:#fff3cd;color:#856404;}
@@ -65,6 +67,9 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
 .alert-box{background:#fff8e1;border-left:4px solid #ffa502;border-radius:0 12px 12px 0;padding:14px;margin-bottom:14px;}
 .alert-box .sec-title{color:#e67e00;}
 .alert-box p{color:#555;font-size:0.88em;margin-top:4px;}
+.loading-bar{text-align:center;color:rgba(255,255,255,0.6);padding:30px;font-size:0.9em;}
+.spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,0.2);border-top-color:#667eea;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
 .footer{text-align:center;color:rgba(255,255,255,0.4);padding:20px;font-size:0.8em;}
 @media(max-width:650px){.readings-wrap{grid-template-columns:1fr;}.info-grid{grid-template-columns:repeat(2,1fr);}}
 </style>
@@ -108,9 +113,10 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
     <div class="header">
       <h1>Ambassador Falola</h1>
       <p>Daily Health Updates &mdash; Family Portal</p>
-      <div class="header-sub">Records from 22 Feb 2026 &middot; Updated regularly</div>
+      <div class="header-sub" id="lu">Loading latest data...</div>
     </div>
-    <div id="rc"></div>
+    <div id="live-section"></div>
+    <div id="history-section"></div>
     <div class="footer">
       <p>Ambassador Olanrewaju Falola &mdash; Family Health Portal</p>
       <p style="margin-top:6px">For emergencies, contact the care team directly.</p>
@@ -121,115 +127,86 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
 <script>
 var PIN = '0226';
 var ent = '';
+var CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQIWWR_VAieTrjboqkegpPjZP43qakEavJfFHaA-lyY5BG1vrAEeBBllehO9gAKLGosI-eIBlXUZKfg/pub?gid=142658432&single=true&output=csv';
 
-var REPORTS = [
-  {
-    date: 'Friday, 27 February 2026',
-    nurse: 'Nurse Pius', shift: '24 Hour',
-    dialysis: 'Yes', dialysisNote: '',
-    r1: {time:'6:00am', sbp:184, dbp:82, hr:80, rr:12, temp:37.0, spo2:82, gluc:4.2},
-    r2: {time:'7:15pm', sbp:137, dbp:61, hr:104, rr:null, temp:37.5, spo2:89, gluc:4.6},
-    r3: {time:'10:00pm', sbp:147, dbp:60, hr:97, rr:16, temp:37.1, spo2:80, gluc:null},
-    feed:'1050 mls', water:'Yes', urine:'Normal', stool:'Once', meds:'All given as prescribed',
-    wound:'Sacrum', wsize:'3cm x 2cm', wdrain:'Mild',
-    wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-    alerts:'SpO2 below 92%, SpO2 below 90%, SBP above 170',
-    alertDetail:'SpO2 today ranged 80-89%; SBP ranged 184-137',
-    overall:'Improving',
-    notes:"Today was Baba's dialysis appointment which was successful."
-  },
-  {
-    date: 'Thursday, 26 February 2026',
-    nurse: 'Nurse Pius', shift: '24 Hour',
-    dialysis: 'No', dialysisNote: '',
-    r1: {time:'6:10am', sbp:170, dbp:83, hr:78, rr:14, temp:36.8, spo2:90, gluc:4.0},
-    r2: {time:'10:03am', sbp:136, dbp:54, hr:103, rr:null, temp:36.8, spo2:73, gluc:null},
-    r3: {time:'7:40pm', sbp:128, dbp:60, hr:91, rr:20, temp:36.9, spo2:82, gluc:null},
-    feed:'1050 mls', water:'Yes', urine:'Normal', stool:'Once', meds:'All given as prescribed',
-    wound:'Sacrum', wsize:'3cm x 2cm', wdrain:'Mild',
-    wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-    alerts:'SpO2 below 92%, SpO2 below 90%',
-    alertDetail:'SpO2 today ranged 73-90%',
-    overall:'Improving',
-    notes:'Nasogastric Tube (NG Tube) removed. Initiated feeding by mouth and well tolerated.'
-  },
-  {
-    date: 'Wednesday, 25 February 2026',
-    nurse: 'Nurse Pius', shift: '24 Hour',
-    dialysis: 'No', dialysisNote: '',
-    r1: {time:'7:00am', sbp:154, dbp:72, hr:91, rr:16, temp:36.7, spo2:80, gluc:4.5},
-    r2: {time:'10:30am', sbp:123, dbp:57, hr:84, rr:null, temp:36.4, spo2:84, gluc:null},
-    r3: {time:'3:40pm', sbp:164, dbp:77, hr:81, rr:16, temp:37.0, spo2:83, gluc:null},
-    feed:'1050 mls', water:'Yes', urine:'Normal', stool:'Once', meds:'All given as prescribed',
-    wound:'Sacrum', wsize:'3cm x 2cm', wdrain:'Mild',
-    wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-    alerts:'SpO2 below 92%, SpO2 below 90%',
-    alertDetail:'SBP today ranged 123-164',
-    overall:'Improving',
-    notes:'Partial response to movement, verbalisation and sensory perception.'
-  },
-  {
-    date: 'Tuesday, 24 February 2026',
-    nurse: 'Nurse Pius', shift: '24 Hour',
-    dialysis: 'Yes', dialysisNote: 'Edema on both hands noted',
-    r1: {time:'6:05am', sbp:189, dbp:81, hr:79, rr:16, temp:37.1, spo2:82, gluc:4.0},
-    r2: {time:'7:00am', sbp:181, dbp:86, hr:84, rr:null, temp:37.3, spo2:85, gluc:null},
-    r3: {time:'10:00am', sbp:170, dbp:87, hr:99, rr:12, temp:36.5, spo2:80, gluc:4.6},
-    feed:'700 mls', water:'Yes (300 mls)', urine:'Normal', stool:'Twice', meds:'All given as prescribed',
-    wound:'Sacrum', wsize:'3cm x 2cm', wdrain:'Mild',
-    wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-    alerts:'SpO2 below 92%, SpO2 below 90%, SBP above 170, Dialysis complication',
-    alertDetail:'SBP ranged 189-170; Temperature ranged 37.3-36.5',
-    overall:'Improving',
-    notes:'Patient receiving minimal feeding and water through the mouth. Partial movement from extremities and partial verbalisation.'
-  },
-  {
-    date: 'Monday, 23 February 2026',
-    nurse: 'Nurse Pius', shift: '24 Hour',
-    dialysis: 'No', dialysisNote: '',
-    r1: {time:'6:00am', sbp:174, dbp:78, hr:95, rr:18, temp:37.2, spo2:99, gluc:4.3},
-    r2: {time:'10:02am', sbp:122, dbp:57, hr:89, rr:null, temp:36.7, spo2:89, gluc:null},
-    r3: {time:'3:05pm', sbp:154, dbp:69, hr:78, rr:14, temp:36.8, spo2:80, gluc:null},
-    feed:'300-350 mls', water:'Yes', urine:'Normal', stool:'Once', meds:'All given as prescribed',
-    wound:'Sacral area / Base of spine (Buttocks)', wsize:'3cm x 2cm', wdrain:'Mild',
-    wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-    alerts:'SpO2 below 92%, SpO2 below 90%, SBP above 170',
-    alertDetail:'SpO2 ranged 80-99%; SBP ranged 122-174',
-    overall:'Improving',
-    notes:'Encouraging oral feeding through the mouth. Baba tolerated meal with no complications.'
-  },
-  {
-    date: 'Sunday, 22 February 2026',
-    nurse: 'Nurse Pius', shift: '24 Hour',
-    dialysis: 'No', dialysisNote: '',
-    r1: {time:'Morning', sbp:150, dbp:85, hr:90, rr:null, temp:null, spo2:91, gluc:null},
-    r2: null, r3: null,
-    feed:'-', water:'-', urine:'-', stool:'-', meds:'-',
-    wound:'-', wsize:'-', wdrain:'-', wcare:'',
-    alerts:'', alertDetail:'',
-    overall:'Stable',
-    notes:'Initial report - baseline vitals recorded.'
-  }
+// Dates already in the hard-coded history (to avoid showing duplicates from the live feed)
+var HISTORY_DATES = ['2/22/2026','2/23/2026','2/24/2026','2/25/2026','2/26/2026','2/27/2026'];
+
+var HISTORY = [
+  {date:'Friday, 27 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',dialysisNote:'',
+   r1:{time:'6:00am',sbp:184,dbp:82,hr:80,rr:12,temp:37.0,spo2:82,gluc:4.2},
+   r2:{time:'7:15pm',sbp:137,dbp:61,hr:104,rr:null,temp:37.5,spo2:89,gluc:4.6},
+   r3:{time:'10:00pm',sbp:147,dbp:60,hr:97,rr:16,temp:37.1,spo2:80,gluc:null},
+   feed:'1050 mls',water:'Yes',urine:'Normal',stool:'Once',meds:'All given as prescribed',
+   wound:'Sacrum',wsize:'3cm x 2cm',wdrain:'Mild',
+   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
+   alerts:'SpO2 below 92%, SpO2 below 90%, SBP above 170',alertDetail:'SpO2 today ranged 80-89%; SBP ranged 184-137',
+   overall:'Improving',notes:"Today was Baba's dialysis appointment which was successful."},
+  {date:'Thursday, 26 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',dialysisNote:'',
+   r1:{time:'6:10am',sbp:170,dbp:83,hr:78,rr:14,temp:36.8,spo2:90,gluc:4.0},
+   r2:{time:'10:03am',sbp:136,dbp:54,hr:103,rr:null,temp:36.8,spo2:73,gluc:null},
+   r3:{time:'7:40pm',sbp:128,dbp:60,hr:91,rr:20,temp:36.9,spo2:82,gluc:null},
+   feed:'1050 mls',water:'Yes',urine:'Normal',stool:'Once',meds:'All given as prescribed',
+   wound:'Sacrum',wsize:'3cm x 2cm',wdrain:'Mild',
+   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
+   alerts:'SpO2 below 92%, SpO2 below 90%',alertDetail:'SpO2 today ranged 73-90%',
+   overall:'Improving',notes:'Nasogastric Tube (NG Tube) removed. Initiated feeding by mouth and well tolerated.'},
+  {date:'Wednesday, 25 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',dialysisNote:'',
+   r1:{time:'7:00am',sbp:154,dbp:72,hr:91,rr:16,temp:36.7,spo2:80,gluc:4.5},
+   r2:{time:'10:30am',sbp:123,dbp:57,hr:84,rr:null,temp:36.4,spo2:84,gluc:null},
+   r3:{time:'3:40pm',sbp:164,dbp:77,hr:81,rr:16,temp:37.0,spo2:83,gluc:null},
+   feed:'1050 mls',water:'Yes',urine:'Normal',stool:'Once',meds:'All given as prescribed',
+   wound:'Sacrum',wsize:'3cm x 2cm',wdrain:'Mild',
+   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
+   alerts:'SpO2 below 92%, SpO2 below 90%',alertDetail:'SBP today ranged 123-164',
+   overall:'Improving',notes:'Partial response to movement, verbalisation and sensory perception.'},
+  {date:'Tuesday, 24 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',dialysisNote:'Edema on both hands noted',
+   r1:{time:'6:05am',sbp:189,dbp:81,hr:79,rr:16,temp:37.1,spo2:82,gluc:4.0},
+   r2:{time:'7:00am',sbp:181,dbp:86,hr:84,rr:null,temp:37.3,spo2:85,gluc:null},
+   r3:{time:'10:00am',sbp:170,dbp:87,hr:99,rr:12,temp:36.5,spo2:80,gluc:4.6},
+   feed:'700 mls',water:'Yes (300 mls)',urine:'Normal',stool:'Twice',meds:'All given as prescribed',
+   wound:'Sacrum',wsize:'3cm x 2cm',wdrain:'Mild',
+   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
+   alerts:'SpO2 below 92%, SpO2 below 90%, SBP above 170, Dialysis complication',alertDetail:'SBP ranged 189-170; Temperature ranged 37.3-36.5',
+   overall:'Improving',notes:'Patient receiving minimal feeding and water through the mouth. Partial movement from extremities and partial verbalisation.'},
+  {date:'Monday, 23 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',dialysisNote:'',
+   r1:{time:'6:00am',sbp:174,dbp:78,hr:95,rr:18,temp:37.2,spo2:99,gluc:4.3},
+   r2:{time:'10:02am',sbp:122,dbp:57,hr:89,rr:null,temp:36.7,spo2:89,gluc:null},
+   r3:{time:'3:05pm',sbp:154,dbp:69,hr:78,rr:14,temp:36.8,spo2:80,gluc:null},
+   feed:'300-350 mls',water:'Yes',urine:'Normal',stool:'Once',meds:'All given as prescribed',
+   wound:'Sacral area / Base of spine (Buttocks)',wsize:'3cm x 2cm',wdrain:'Mild',
+   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
+   alerts:'SpO2 below 92%, SpO2 below 90%, SBP above 170',alertDetail:'SpO2 ranged 80-99%; SBP ranged 122-174',
+   overall:'Improving',notes:'Encouraging oral feeding through the mouth. Baba tolerated meal with no complications.'},
+  {date:'Sunday, 22 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',dialysisNote:'',
+   r1:{time:'Morning',sbp:150,dbp:85,hr:90,rr:null,temp:null,spo2:91,gluc:null},r2:null,r3:null,
+   feed:'-',water:'-',urine:'-',stool:'-',meds:'-',wound:'-',wsize:'-',wdrain:'-',wcare:'',
+   alerts:'',alertDetail:'',overall:'Stable',notes:'Initial report - baseline vitals recorded.'}
 ];
 
+// PIN logic
 function ud(){for(var i=1;i<=4;i++)document.getElementById('d'+i).className='pin-dot'+(ent.length>=i?' filled':'');}
 function pp(d){if(ent.length>=4)return;ent+=d;ud();document.getElementById('pe').innerHTML='&nbsp;';if(ent.length===4)setTimeout(cp,200);}
 function pd(){ent=ent.slice(0,-1);ud();}
 function pc(){ent='';ud();document.getElementById('pe').innerHTML='&nbsp;';}
-function cp(){if(ent===PIN){document.getElementById('pin-screen').style.display='none';document.getElementById('main-content').style.display='block';sessionStorage.setItem('a','1');renderAll();}else{document.getElementById('pe').textContent='Incorrect PIN. Try again.';ent='';ud();}}
-function lockScreen(){sessionStorage.removeItem('a');document.getElementById('main-content').style.display='none';document.getElementById('pin-screen').style.display='flex';ent='';ud();}
+function cp(){if(ent===PIN){document.getElementById('pin-screen').style.display='none';document.getElementById('main-content').style.display='block';sessionStorage.setItem('fa','1');init();}else{document.getElementById('pe').textContent='Incorrect PIN. Try again.';ent='';ud();}}
+function lockScreen(){sessionStorage.removeItem('fa');document.getElementById('main-content').style.display='none';document.getElementById('pin-screen').style.display='flex';ent='';ud();}
 document.addEventListener('keydown',function(e){if(document.getElementById('pin-screen').style.display!=='none'){if(e.key>='0'&&e.key<='9')pp(e.key);else if(e.key==='Backspace')pd();else if(e.key==='Escape')pc();}});
-if(sessionStorage.getItem('a')==='1'){document.getElementById('pin-screen').style.display='none';document.getElementById('main-content').style.display='block';renderAll();}
+if(sessionStorage.getItem('fa')==='1'){document.getElementById('pin-screen').style.display='none';document.getElementById('main-content').style.display='block';init();}
 
+// Status helpers
 function bpSt(s,d){if(!s||!d)return{c:'',l:'',lc:''};if(s>=180||d>=120)return{c:'alert-card',l:'Very High',lc:'s-high'};if(s>=140||d>=90)return{c:'warn-card',l:'High',lc:'s-high'};if(s<90||d<60)return{c:'warn-card',l:'Low',lc:'s-low'};return{c:'good-card',l:'Normal',lc:'s-normal'};}
 function o2St(v){if(!v)return{c:'',l:'',lc:''};if(v<90)return{c:'alert-card',l:'Critical',lc:'s-high'};if(v<95)return{c:'warn-card',l:'Low',lc:'s-watch'};return{c:'good-card',l:'Normal',lc:'s-normal'};}
 function hrSt(v){if(!v)return{l:'',lc:''};if(v>100)return{l:'High',lc:'s-high'};if(v<60)return{l:'Low',lc:'s-low'};return{l:'Normal',lc:'s-normal'};}
 function tpSt(v){if(!v)return{l:'',lc:''};if(v>=38)return{l:'Fever',lc:'s-high'};if(v<36)return{l:'Low',lc:'s-low'};return{l:'Normal',lc:'s-normal'};}
 function condSt(c){var l=(c||'').toLowerCase();if(l.includes('improv'))return{cl:'cond-good',tx:'Improving'};if(l.includes('stable'))return{cl:'cond-stable',tx:'Stable'};if(l.includes('good'))return{cl:'cond-good',tx:'Good'};if(l.includes('fair'))return{cl:'cond-fair',tx:'Fair'};if(l.includes('poor')||l.includes('critical'))return{cl:'cond-concern',tx:'Concern'};return{cl:'cond-stable',tx:c||'Stable'};}
 function vc(css,label,val,unit,sl,slc){return'<div class="vcard '+css+'"><div class="vlabel">'+label+'</div><div class="vval">'+(val!=null&&val!==''?val:'-')+'</div><div class="vunit">'+unit+'</div>'+(sl?'<span class="vstatus '+slc+'">'+sl+'</span>':'')+'</div>';}
-function ic(label,val){return'<div class="icard"><div class="ilabel">'+label+'</div><div class="ival">'+(val||'-')+'</div></div>';}
+function ic(label,val){return'<div class="icard"><div class="ilabel">'+label+'</div><div class="ival">'+(val&&val!==''?val:'-')+'</div></div>';}
+function nn(v){return(v&&v!=='Nil'&&v!=='Nill'&&v!=='nil'&&v.trim()!=='')?v:'';}
+function num(v){var n=parseFloat(v);return isNaN(n)?null:n;}
 
-function renderR(r){
+// Render a single reading block from an object
+function renderRO(r){
   if(!r)return'';
   var bp=bpSt(r.sbp,r.dbp),o2=o2St(r.spo2),hr=hrSt(r.hr),tp=tpSt(r.temp);
   return vc(bp.c,'Blood Pressure',(r.sbp&&r.dbp?r.sbp+'/'+r.dbp:''),'mmHg',bp.l,bp.lc)+
@@ -240,33 +217,124 @@ function renderR(r){
     (r.gluc?vc('','Blood Sugar',r.gluc,'mmol/L','',''):'');
 }
 
-function renderReport(rep,idx){
+// Render a report card from structured object (used for history)
+function renderCard(rep,isLive){
   var cs=condSt(rep.overall);
-  var h='<div class="report-card">';
-  h+='<div class="report-header"><div class="report-date">'+rep.date+'</div><div class="badges"><div class="nurse-badge">'+rep.nurse+'</div><div class="shift-badge">'+rep.shift+'</div></div></div>';
+  var h='<div class="report-card'+(isLive?' live-entry':'')+'"><div class="report-header"><div class="report-date">'+rep.date+'</div><div class="badges"><div class="nurse-badge">'+rep.nurse+'</div><div class="shift-badge">'+rep.shift+'</div>'+(isLive?'<div class="new-badge">NEW</div>':'')+'</div></div>';
   h+='<div class="condition-banner '+cs.cl+'">Overall Condition: <strong>'+cs.tx+'</strong></div>';
   h+='<div class="sec-title">Vital Signs</div><div class="readings-wrap">';
-  if(rep.r1)h+='<div class="reading-block"><h4>Reading 1 &mdash; '+rep.r1.time+'</h4><div class="vitals-grid">'+renderR(rep.r1)+'</div></div>';
-  if(rep.r2)h+='<div class="reading-block"><h4>Reading 2 &mdash; '+rep.r2.time+'</h4><div class="vitals-grid">'+renderR(rep.r2)+'</div></div>';
-  if(rep.r3)h+='<div class="reading-block"><h4>Reading 3 &mdash; '+rep.r3.time+'</h4><div class="vitals-grid">'+renderR(rep.r3)+'</div></div>';
+  if(rep.r1)h+='<div class="reading-block"><h4>Reading 1 &mdash; '+rep.r1.time+'</h4><div class="vitals-grid">'+renderRO(rep.r1)+'</div></div>';
+  if(rep.r2)h+='<div class="reading-block"><h4>Reading 2 &mdash; '+rep.r2.time+'</h4><div class="vitals-grid">'+renderRO(rep.r2)+'</div></div>';
+  if(rep.r3)h+='<div class="reading-block"><h4>Reading 3 &mdash; '+rep.r3.time+'</h4><div class="vitals-grid">'+renderRO(rep.r3)+'</div></div>';
   h+='</div>';
-  if(rep.dialysis==='Yes'){h+='<div class="dialysis-box"><div class="sec-title">Dialysis</div><p style="font-size:.9em;color:#444">Dialysis today: <strong>Yes</strong>'+(rep.dialysisNote?' &mdash; '+rep.dialysisNote:'')+'</p></div>';}
-  if(rep.feed&&rep.feed!=='-'){h+='<div class="sec-title">Nutrition &amp; Fluids</div><div class="info-grid">'+ic('Blenderized Feed',rep.feed)+ic('Free Water',rep.water)+ic('Urine Output',rep.urine)+ic('Stool',rep.stool)+'</div>';}
-  if(rep.wound&&rep.wound!=='-'){h+='<div class="sec-title">Wound Care</div><div class="note-box"><strong>Location:</strong> '+rep.wound+'<br><strong>Size:</strong> '+rep.wsize+' &nbsp;|&nbsp; <strong>Drainage:</strong> '+rep.wdrain+(rep.wcare?'<br><strong>Care Done:</strong> '+rep.wcare:'')+'</div>';}
-  if(rep.alerts){h+='<div class="alert-box"><div class="sec-title">Flagged Events</div><p><strong>Alerts:</strong> '+rep.alerts+'</p>'+(rep.alertDetail?'<p>'+rep.alertDetail+'</p>':'')+'</div>';}
-  if(rep.notes){h+='<div class="sec-title">Nurse Notes</div><div class="note-box">'+rep.notes+'</div>';}
+  if(rep.dialysis==='Yes')h+='<div class="dialysis-box"><div class="sec-title">Dialysis</div><p style="font-size:.9em;color:#444">Dialysis today: <strong>Yes</strong>'+(rep.dialysisNote?' &mdash; '+rep.dialysisNote:'')+'</p></div>';
+  if(rep.feed&&rep.feed!=='-')h+='<div class="sec-title">Nutrition &amp; Fluids</div><div class="info-grid">'+ic('Blenderized Feed',rep.feed)+ic('Free Water',rep.water)+ic('Urine Output',rep.urine)+ic('Stool',rep.stool)+'</div>';
+  if(rep.wound&&rep.wound!=='-')h+='<div class="sec-title">Wound Care</div><div class="note-box"><strong>Location:</strong> '+rep.wound+'<br><strong>Size:</strong> '+rep.wsize+' &nbsp;|&nbsp; <strong>Drainage:</strong> '+rep.wdrain+(rep.wcare?'<br><strong>Care Done:</strong> '+rep.wcare:'')+'</div>';
+  if(rep.alerts)h+='<div class="alert-box"><div class="sec-title">Flagged Events</div><p><strong>Alerts:</strong> '+rep.alerts+'</p>'+(rep.alertDetail?'<p>'+rep.alertDetail+'</p>':'')+'</div>';
+  if(rep.notes)h+='<div class="sec-title">Nurse Notes</div><div class="note-box">'+rep.notes+'</div>';
   h+='</div>';
   return h;
 }
 
-function renderAll(){
-  var h='';
-  for(var i=0;i<REPORTS.length;i++){
-    if(i===0)h+='<div class="section-divider">Latest Report</div>';
-    if(i===1)h+='<div class="section-divider">Previous Reports</div>';
-    h+=renderReport(REPORTS[i],i);
+// Parse CSV row into a report object (columns match Form Responses 1 sheet)
+// NOTE: Column 58 (Wound Photo) is intentionally NOT read or displayed
+function parseRow(cols){
+  return {
+    date: cols[1]||'',
+    nurse: cols[2]||'Nurse',
+    shift: cols[3]||'24 Hour',
+    dialysis: cols[4]||'No',
+    dialysisNote: nn(cols[7]),
+    r1: (cols[9]||cols[10]||cols[14]) ? {
+      time:cols[8]||'',sbp:num(cols[9]),dbp:num(cols[10]),hr:num(cols[11]),rr:num(cols[12]),temp:num(cols[13]),spo2:num(cols[14]),gluc:num(cols[15])
+    } : null,
+    r2: (cols[17]||cols[18]||cols[21]) ? {
+      time:cols[16]||'',sbp:num(cols[17]),dbp:num(cols[18]),hr:num(cols[19]),rr:null,temp:num(cols[20]),spo2:num(cols[21]),gluc:num(cols[22])
+    } : null,
+    r3: (cols[24]||cols[25]||cols[29]) ? {
+      time:cols[23]||'',sbp:num(cols[24]),dbp:num(cols[25]),hr:num(cols[26]),rr:num(cols[27]),temp:num(cols[28]),spo2:num(cols[29]),gluc:num(cols[30])
+    } : null,
+    feed: nn(cols[35])||'-',
+    water: nn(cols[36])||'-',
+    urine: nn(cols[39])||'-',
+    stool: nn(cols[40])||'-',
+    meds: nn(cols[41])||'-',
+    wound: nn(cols[45])||'-',
+    wsize: (nn(cols[46])&&nn(cols[47])) ? cols[46]+'cm x '+cols[47]+'cm' : '-',
+    wdrain: nn(cols[48])||'-',
+    wcare: nn(cols[50])||'',
+    alerts: nn(cols[51])||'',
+    alertDetail: nn(cols[52])||'',
+    overall: nn(cols[53])||'Stable',
+    notes: nn(cols[54])||''
+    // col[58] = Wound Photo - intentionally skipped
+  };
+}
+
+// Parse CSV text into array of arrays
+function parseCSV(text){
+  var rows=[],lines=text.split('\n');
+  for(var i=0;i<lines.length;i++){
+    var line=lines[i],row=[],q=false,c='';
+    for(var j=0;j<line.length;j++){
+      var ch=line[j];
+      if(ch==='"'){if(q&&line[j+1]==='"'){c+='"';j++;}else q=!q;}
+      else if(ch===','&&!q){row.push(c.trim());c='';}
+      else c+=ch;
+    }
+    row.push(c.trim());
+    if(row.some(function(x){return x.trim()!=='';}))rows.push(row);
   }
-  document.getElementById('rc').innerHTML=h;
+  return rows;
+}
+
+// Format a raw date string like "2/28/2026" into display format
+function fmtDate(d){
+  try{
+    var parts=d.split('/');
+    var dt=new Date(parts[2],parts[0]-1,parts[1]);
+    return dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  }catch(e){return d;}
+}
+
+function init(){
+  // Render history immediately
+  var hh='<div class="section-divider">Previous Reports (22 - 27 Feb 2026)</div>';
+  for(var i=0;i<HISTORY.length;i++) hh+=renderCard(HISTORY[i],false);
+  document.getElementById('history-section').innerHTML=hh;
+
+  // Show loading for live section
+  document.getElementById('live-section').innerHTML='<div class="loading-bar"><div class="spinner"></div>Checking for new reports...</div>';
+
+  // Fetch live data
+  fetch(CSV+'&t='+Date.now())
+    .then(function(r){return r.text();})
+    .then(function(text){
+      var rows=parseCSV(text);
+      var newRows=[];
+      for(var i=rows.length-1;i>=1;i--){
+        var rawDate=(rows[i][1]||'').trim();
+        // Only show rows NOT already in the hard-coded history
+        if(rawDate && HISTORY_DATES.indexOf(rawDate)===-1){
+          var rep=parseRow(rows[i]);
+          rep.date=fmtDate(rawDate);
+          newRows.push(rep);
+        }
+      }
+      var lh='';
+      if(newRows.length>0){
+        lh='<div class="section-divider">New Reports</div>';
+        for(var j=0;j<newRows.length;j++) lh+=renderCard(newRows[j],true);
+        document.getElementById('lu').textContent='Last updated: '+new Date().toLocaleString();
+      } else {
+        document.getElementById('lu').textContent='Records from 22 Feb 2026 - No new entries yet';
+      }
+      document.getElementById('live-section').innerHTML=lh;
+    })
+    .catch(function(){
+      document.getElementById('live-section').innerHTML='';
+      document.getElementById('lu').textContent='Records from 22 Feb 2026';
+    });
 }
 </script>
 </body>
