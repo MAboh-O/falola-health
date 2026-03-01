@@ -49,13 +49,9 @@ body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a1a2e;min-height:10
 .vital-value{font-size:20px;font-weight:700;color:#1a1a2e}
 .vital-unit{font-size:11px;color:#adb5bd}
 .vital-status{display:inline-block;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700;margin-top:4px}
-.s-normal{background:#d4edda;color:#155724}
-.s-elevated{background:#d4edda;color:#155724}
-.s-high{background:#fff3cd;color:#856404}
-.s-high-stage-1{background:#fff3cd;color:#856404}
-.s-very-high,.s-critical,.s-low{background:#f8d7da;color:#721c24}
-.s-low-fever{background:#fff3cd;color:#856404}
-.s-fever{background:#f8d7da;color:#721c24}
+.s-normal,.s-elevated{background:#d4edda;color:#155724}
+.s-high,.s-high-stage-1,.s-low-fever{background:#fff3cd;color:#856404}
+.s-very-high,.s-critical,.s-low,.s-fever{background:#f8d7da;color:#721c24}
 .reading-hdr{font-size:12px;font-weight:700;color:#0f3460;text-transform:uppercase;letter-spacing:1px;margin:12px 0 8px;padding:6px 10px;background:#e8eef7;border-radius:6px}
 .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
 .detail-item{background:#f8f9fa;border-radius:8px;padding:10px 14px}
@@ -68,7 +64,6 @@ body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a1a2e;min-height:10
 </style>
 </head>
 <body>
-
 <div id="pin-screen" class="pin-screen">
   <div class="pin-box">
     <div class="pin-logo">+</div>
@@ -91,7 +86,6 @@ body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a1a2e;min-height:10
     <div class="pin-hint">Enter your 4-digit family PIN</div>
   </div>
 </div>
-
 <div id="main-content" style="display:none">
   <div class="container">
     <div class="top-bar">
@@ -110,13 +104,11 @@ body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a1a2e;min-height:10
     </div>
   </div>
 </div>
-
 <script>
 var PIN='0226';
 var CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQIWWR_VAieTrjboqkegpPjZP43qakEavJfFHaA-lyY5BG1vrAEeBBllehO9gAKLGosI-eIBlXUZKfg/pub?gid=142658432&single=true&output=csv';
 var HDATES=['2/22/2026','2/23/2026','2/24/2026','2/25/2026','2/26/2026','2/27/2026','2/28/2026'];
 var ent='';
-
 function pp(d){if(ent.length<4){ent+=d;ud();}}
 function pc(){ent='';ud();}
 function ud(){
@@ -140,15 +132,13 @@ document.addEventListener('keydown',function(e){
     else if(e.key==='Backspace'||e.key==='Delete'||e.key==='Escape')pc();
   }
 });
-
 function parseCSV(text){
   var lines=[];var cur='';var inq=false;
   for(var i=0;i<text.length;i++){
     var c=text[i];
     if(c==='"'){inq=!inq;}
-    else if(c==='
-'&&!inq){lines.push(cur);cur='';}
-    else if(c!==''){cur+=c;}
+    else if(c.charCodeAt(0)===10&&!inq){lines.push(cur);cur='';}
+    else if(c.charCodeAt(0)!==13){cur+=c;}
   }
   if(cur)lines.push(cur);
   return lines.map(function(line){
@@ -163,7 +153,6 @@ function parseCSV(text){
     return fields;
   });
 }
-
 function bpC(s){var v=parseInt(s)||0;return v<120?'grn-bdr':v<140?'ylw-bdr':'red-bdr';}
 function bpS(s){var v=parseInt(s)||0;if(v<120)return 'Normal';if(v<130)return 'Elevated';if(v<140)return 'High Stage 1';if(v<180)return 'High';return 'Very High';}
 function puC(p){var v=parseInt(p)||0;return(v>=60&&v<=100)?'grn-bdr':(v>=50&&v<=110)?'ylw-bdr':'red-bdr';}
@@ -173,7 +162,6 @@ function spS(s){var v=parseInt(s)||0;if(v>=95)return 'Normal';if(v>=90)return 'L
 function tpC(t){var v=parseFloat(t)||0;return(v>=36.1&&v<=37.2)?'grn-bdr':(v>=37.3&&v<=38.0)?'ylw-bdr':'red-bdr';}
 function tpS(t){var v=parseFloat(t)||0;if(v>=36.1&&v<=37.2)return 'Normal';if(v>=37.3&&v<=38.0)return 'Low Fever';if(v>38.0)return 'Fever';return 'Low';}
 function cC(c){var l=(c||'').toLowerCase();if(l.indexOf('improv')>=0)return 'condition-improving';if(l.indexOf('declin')>=0)return 'condition-declining';return 'condition-stable';}
-
 function smartParse(r){
   var cv=['Improving','Stable','Declining'];
   var ci=-1;
@@ -191,7 +179,6 @@ function smartParse(r){
     dailyWeight:(wt&&wt!='0')?wt:''
   };
 }
-
 function rdgHTML(lbl,sbp,dbp,pulse,rr,temp,spo2,glucose){
   if(!sbp&&!pulse&&!spo2)return '';
   var h='<div class="reading-hdr">'+lbl+'</div><div class="vitals-grid">';
@@ -204,7 +191,6 @@ function rdgHTML(lbl,sbp,dbp,pulse,rr,temp,spo2,glucose){
   h+='</div>';
   return h;
 }
-
 function buildCard(d,isNew){
   var h='<div class="report-card">';
   h+='<div class="report-header">';
@@ -235,7 +221,6 @@ function buildCard(d,isNew){
   h+='</div>';
   return h;
 }
-
 function fetchLive(){
   var btn=document.getElementById('refresh-btn');
   var st=document.getElementById('refresh-status');
@@ -252,9 +237,9 @@ function fetchLive(){
       }
       var ld=document.getElementById('live-section');
       if(newRows.length>0){
-        var h='<div class="section-title">New Reports <span class="new-badge">'+newRows.length+'</span></div>';
-        newRows.forEach(function(row){h+=buildCard(smartParse(row),true);});
-        ld.innerHTML=h;
+        var hh='<div class="section-title">New Reports <span class="new-badge">'+newRows.length+'</span></div>';
+        newRows.forEach(function(row){hh+=buildCard(smartParse(row),true);});
+        ld.innerHTML=hh;
       } else {
         ld.innerHTML='<div class="report-card" style="text-align:center;color:#6c757d;padding:30px">No new entries since 28 February 2026</div>';
       }
@@ -268,20 +253,10 @@ function fetchLive(){
       btn.disabled=false;btn.textContent='Try Again';
     });
 }
-
 function renderHistory(){
   document.getElementById('history-section').innerHTML='<div class="section-title" style="margin-top:20px">Previous Reports (22 - 28 Feb 2026)</div>'+histCards();
 }
-
-function histCards(){
-return buildCard({date:'2/22/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'',postDW:'',r1time:'6:00am',r1sbp:'150',r1dbp:'85',r1pulse:'90',r1rr:'',r1temp:'',r1spo2:'91',r1glucose:'',r2time:'',r2sbp:'',r2dbp:'',r2pulse:'',r2temp:'',r2spo2:'',r2glucose:'',r3time:'',r3sbp:'',r3dbp:'',r3pulse:'',r3rr:'',r3temp:'',r3spo2:'',r3glucose:'',urine:'',stool:'',condition:'',comments:'',dailyWeight:''},false)+
-buildCard({date:'2/23/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'',postDW:'',r1time:'6:00am',r1sbp:'174',r1dbp:'78',r1pulse:'95',r1rr:'',r1temp:'37.20',r1spo2:'99',r1glucose:'',r2time:'7:15pm',r2sbp:'122',r2dbp:'57',r2pulse:'89',r2temp:'36.70',r2spo2:'89',r2glucose:'',r3time:'10:00pm',r3sbp:'154',r3dbp:'69',r3pulse:'78',r3rr:'',r3temp:'36.80',r3spo2:'80',r3glucose:'',urine:'Normal',stool:'',condition:'Improving',comments:'I encouraging oral feeding through the mouth and Baba tolerated meal with no complications',dailyWeight:''},false)+
-buildCard({date:'2/24/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',preDW:'Nil',postDW:'Nil',r1time:'6:05am',r1sbp:'189',r1dbp:'81',r1pulse:'79',r1rr:'16',r1temp:'37.10',r1spo2:'82',r1glucose:'4.00',r2time:'7:00pm',r2sbp:'181',r2dbp:'86',r2pulse:'84',r2temp:'37.30',r2spo2:'85',r2glucose:'Nil',r3time:'10:00am',r3sbp:'170',r3dbp:'87',r3pulse:'99',r3rr:'12',r3temp:'36.50',r3spo2:'80',r3glucose:'4.60',urine:'Normal',stool:'Twice',condition:'Improving',comments:'Patient recieving minimal feeding and water through the mouth, partially movement From the extremities and partially verbalisation',dailyWeight:''},false)+
-buildCard({date:'2/25/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'Nil',postDW:'Nil',r1time:'6:00am',r1sbp:'154',r1dbp:'72',r1pulse:'91',r1rr:'16',r1temp:'36.70',r1spo2:'80',r1glucose:'4.00',r2time:'7:00pm',r2sbp:'123',r2dbp:'57',r2pulse:'84',r2temp:'36.40',r2spo2:'84',r2glucose:'Nil',r3time:'10:00pm',r3sbp:'164',r3dbp:'77',r3pulse:'81',r3rr:'16',r3temp:'37.00',r3spo2:'83',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Partial response to movement, verbalisation and sensory perception',dailyWeight:''},false)+
-buildCard({date:'2/26/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'Nil',postDW:'Nil',r1time:'6:00am',r1sbp:'170',r1dbp:'83',r1pulse:'78',r1rr:'14',r1temp:'36.80',r1spo2:'90',r1glucose:'4.00',r2time:'7:00pm',r2sbp:'137',r2dbp:'71',r2pulse:'73',r2temp:'36.90',r2spo2:'85',r2glucose:'Nil',r3time:'10:00pm',r3sbp:'131',r3dbp:'63',r3pulse:'90',r3rr:'18',r3temp:'36.90',r3spo2:'83',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Nasogastric Tube (NG Tube) removed, initiated feeding by mouth and well tolerated.',dailyWeight:''},false)+
-buildCard({date:'2/27/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',preDW:'Nil',postDW:'Nil',r1time:'6:00am',r1sbp:'184',r1dbp:'82',r1pulse:'80',r1rr:'12',r1temp:'37.00',r1spo2:'82',r1glucose:'4.20',r2time:'7:15pm',r2sbp:'137',r2dbp:'61',r2pulse:'104',r2temp:'37.50',r2spo2:'89',r2glucose:'4.60',r3time:'10:00pm',r3sbp:'147',r3dbp:'60',r3pulse:'97',r3rr:'16',r3temp:'37.10',r3spo2:'80',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Today was Baba appointment which was successful',dailyWeight:''},false)+
-buildCard({date:'2/28/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'',postDW:'',r1time:'6:00am',r1sbp:'187',r1dbp:'91',r1pulse:'107',r1rr:'14',r1temp:'37.20',r1spo2:'85',r1glucose:'4.5',r2time:'9:00am',r2sbp:'120',r2dbp:'58',r2pulse:'91',r2temp:'36.90',r2spo2:'82',r2glucose:'5.8',r3time:'5:50am',r3sbp:'171',r3dbp:'78',r3pulse:'88',r3rr:'14',r3temp:'36.50',r3spo2:'83',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Improvement on sensory responses',dailyWeight:''},false);
-}
+function histCards(){return buildCard({date:'2/22/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'',postDW:'',r1time:'6:00am',r1sbp:'150',r1dbp:'85',r1pulse:'90',r1rr:'',r1temp:'',r1spo2:'91',r1glucose:'',r2time:'',r2sbp:'',r2dbp:'',r2pulse:'',r2temp:'',r2spo2:'',r2glucose:'',r3time:'',r3sbp:'',r3dbp:'',r3pulse:'',r3rr:'',r3temp:'',r3spo2:'',r3glucose:'',urine:'',stool:'',condition:'',comments:'',dailyWeight:''},false)+buildCard({date:'2/23/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'',postDW:'',r1time:'6:00am',r1sbp:'174',r1dbp:'78',r1pulse:'95',r1rr:'',r1temp:'37.20',r1spo2:'99',r1glucose:'',r2time:'7:15pm',r2sbp:'122',r2dbp:'57',r2pulse:'89',r2temp:'36.70',r2spo2:'89',r2glucose:'',r3time:'10:00pm',r3sbp:'154',r3dbp:'69',r3pulse:'78',r3rr:'',r3temp:'36.80',r3spo2:'80',r3glucose:'',urine:'Normal',stool:'',condition:'Improving',comments:'I encouraging oral feeding through the mouth and Baba tolerated meal with no complications',dailyWeight:''},false)+buildCard({date:'2/24/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',preDW:'Nil',postDW:'Nil',r1time:'6:05am',r1sbp:'189',r1dbp:'81',r1pulse:'79',r1rr:'16',r1temp:'37.10',r1spo2:'82',r1glucose:'4.00',r2time:'7:00pm',r2sbp:'181',r2dbp:'86',r2pulse:'84',r2temp:'37.30',r2spo2:'85',r2glucose:'Nil',r3time:'10:00am',r3sbp:'170',r3dbp:'87',r3pulse:'99',r3rr:'12',r3temp:'36.50',r3spo2:'80',r3glucose:'4.60',urine:'Normal',stool:'Twice',condition:'Improving',comments:'Patient recieving minimal feeding and water through the mouth, partially movement From the extremities and partially verbalisation',dailyWeight:''},false)+buildCard({date:'2/25/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'Nil',postDW:'Nil',r1time:'6:00am',r1sbp:'154',r1dbp:'72',r1pulse:'91',r1rr:'16',r1temp:'36.70',r1spo2:'80',r1glucose:'4.00',r2time:'7:00pm',r2sbp:'123',r2dbp:'57',r2pulse:'84',r2temp:'36.40',r2spo2:'84',r2glucose:'Nil',r3time:'10:00pm',r3sbp:'164',r3dbp:'77',r3pulse:'81',r3rr:'16',r3temp:'37.00',r3spo2:'83',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Partial response to movement, verbalisation and sensory perception',dailyWeight:''},false)+buildCard({date:'2/26/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'Nil',postDW:'Nil',r1time:'6:00am',r1sbp:'170',r1dbp:'83',r1pulse:'78',r1rr:'14',r1temp:'36.80',r1spo2:'90',r1glucose:'4.00',r2time:'7:00pm',r2sbp:'137',r2dbp:'71',r2pulse:'73',r2temp:'36.90',r2spo2:'85',r2glucose:'Nil',r3time:'10:00pm',r3sbp:'131',r3dbp:'63',r3pulse:'90',r3rr:'18',r3temp:'36.90',r3spo2:'83',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Nasogastric Tube (NG Tube) removed, initiated feeding by mouth and well tolerated.',dailyWeight:''},false)+buildCard({date:'2/27/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',preDW:'Nil',postDW:'Nil',r1time:'6:00am',r1sbp:'184',r1dbp:'82',r1pulse:'80',r1rr:'12',r1temp:'37.00',r1spo2:'82',r1glucose:'4.20',r2time:'7:15pm',r2sbp:'137',r2dbp:'61',r2pulse:'104',r2temp:'37.50',r2spo2:'89',r2glucose:'4.60',r3time:'10:00pm',r3sbp:'147',r3dbp:'60',r3pulse:'97',r3rr:'16',r3temp:'37.10',r3spo2:'80',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Today was Baba appointment which was successful',dailyWeight:''},false)+buildCard({date:'2/28/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'',postDW:'',r1time:'6:00am',r1sbp:'187',r1dbp:'91',r1pulse:'107',r1rr:'14',r1temp:'37.20',r1spo2:'85',r1glucose:'4.5',r2time:'9:00am',r2sbp:'120',r2dbp:'58',r2pulse:'91',r2temp:'36.90',r2spo2:'82',r2glucose:'5.8',r3time:'5:50am',r3sbp:'171',r3dbp:'78',r3pulse:'88',r3rr:'14',r3temp:'36.50',r3spo2:'83',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Improvement on sensory responses',dailyWeight:''},false);}
 </script>
 </body>
 </html>
