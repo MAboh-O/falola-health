@@ -5,88 +5,76 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Falola Family Health Portal</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);min-height:100vh;}
-#pin-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
-.pin-card{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15);border-radius:28px;padding:45px 40px;max-width:400px;width:100%;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.4);}
-.pin-title{font-size:1.8em;font-weight:800;color:#fff;margin-bottom:6px;}
-.pin-sub{color:rgba(255,255,255,0.6);font-size:0.9em;margin-bottom:30px;}
-.pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:24px;}
-.pin-dot{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.3);transition:all 0.2s;}
-.pin-dot.filled{background:#667eea;border-color:#667eea;box-shadow:0 0 12px rgba(102,126,234,0.7);}
-.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
-.pin-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:16px;color:#fff;font-size:1.4em;font-weight:600;padding:18px;cursor:pointer;transition:all 0.15s;user-select:none;}
-.pin-btn:active,.pin-btn:hover{background:rgba(102,126,234,0.45);border-color:#667eea;transform:scale(0.96);}
-.pin-error{color:#ff6b6b;font-size:0.85em;min-height:20px;margin-top:-10px;margin-bottom:10px;font-weight:600;}
-.pin-hint{color:rgba(255,255,255,0.35);font-size:0.78em;margin-top:12px;}
-#main-content{display:none;min-height:100vh;padding:20px;}
-.container{max-width:900px;margin:0 auto;}
-.top-bar{display:flex;justify-content:flex-end;margin-bottom:5px;}
-.lock-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);border-radius:20px;padding:6px 16px;font-size:0.78em;cursor:pointer;}
-.header{text-align:center;color:white;padding:20px 20px 15px;}
-.header h1{font-size:2em;font-weight:800;}
-.header p{font-size:1em;opacity:0.8;margin-top:6px;}
-.header-sub{font-size:0.78em;opacity:0.5;margin-top:4px;}
-.section-divider{text-align:center;color:rgba(255,255,255,0.5);font-size:0.82em;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:15px 0 5px;border-top:1px solid rgba(255,255,255,0.1);margin-top:10px;}
-.report-card{background:rgba(255,255,255,0.97);border-radius:22px;padding:26px;margin:15px 0;box-shadow:0 12px 40px rgba(0,0,0,0.25);}
-.report-card.live-entry{border-top:4px solid #2ed573;}
-.report-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f0f0f5;padding-bottom:15px;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
-.report-date{font-size:1.2em;font-weight:800;color:#1a1a2e;}
-.badges{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.nurse-badge{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:6px 15px;border-radius:20px;font-size:0.82em;font-weight:600;}
-.shift-badge{background:rgba(102,126,234,0.15);color:#667eea;padding:4px 12px;border-radius:20px;font-size:0.75em;font-weight:600;}
-.new-badge{background:#2ed573;color:#fff;padding:4px 10px;border-radius:20px;font-size:0.72em;font-weight:700;}
-.condition-banner{text-align:center;padding:12px 20px;border-radius:14px;font-size:1em;font-weight:700;margin-bottom:18px;}
-.cond-good{background:#d4edda;color:#155724;}
-.cond-fair{background:#fff3cd;color:#856404;}
-.cond-concern{background:#f8d7da;color:#721c24;}
-.cond-stable{background:#dde8ff;color:#2d4baa;}
-.sec-title{font-size:0.8em;font-weight:800;color:#667eea;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;}
-.readings-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
-.reading-block{background:#f8f9ff;border-radius:14px;padding:14px;}
-.reading-block h4{font-size:0.72em;color:#667eea;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
-.vitals-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
-.vcard{background:#f4f6ff;border-radius:12px;padding:12px 8px;text-align:center;border:2px solid transparent;}
-.vcard.alert-card{border-color:#ff4757;background:#fff5f5;}
-.vcard.warn-card{border-color:#ffa502;background:#fffbf0;}
-.vcard.good-card{border-color:#2ed573;background:#f0fff5;}
-.vlabel{font-size:0.65em;color:#888;font-weight:700;text-transform:uppercase;margin-bottom:2px;}
-.vval{font-size:1.2em;font-weight:900;color:#1a1a2e;}
-.vunit{font-size:0.68em;color:#aaa;}
-.vstatus{font-size:0.65em;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px;}
-.s-normal{background:#d4edda;color:#155724;}
-.s-low{background:#cce5ff;color:#004085;}
-.s-high{background:#f8d7da;color:#721c24;}
-.s-watch{background:#fff3cd;color:#856404;}
-.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px;}
-.icard{background:#f4f6ff;border-radius:12px;padding:12px 10px;text-align:center;}
-.ilabel{font-size:0.65em;color:#888;font-weight:700;text-transform:uppercase;margin-bottom:4px;}
-.ival{font-size:1em;font-weight:700;color:#1a1a2e;}
-.dialysis-box{background:linear-gradient(135deg,#e0f7fa,#fce4ec);border-radius:14px;padding:14px;margin-bottom:18px;}
-.note-box{background:#f4f6ff;border-left:4px solid #667eea;border-radius:0 12px 12px 0;padding:14px;margin-bottom:14px;font-size:0.9em;color:#333;line-height:1.65;}
-.alert-box{background:#fff8e1;border-left:4px solid #ffa502;border-radius:0 12px 12px 0;padding:14px;margin-bottom:14px;}
-.alert-box .sec-title{color:#e67e00;}
-.alert-box p{color:#555;font-size:0.88em;margin-top:4px;}
-.loading-bar{text-align:center;color:rgba(255,255,255,0.6);padding:30px;font-size:0.9em;}
-.spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,0.2);border-top-color:#667eea;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.footer{text-align:center;color:rgba(255,255,255,0.4);padding:20px;font-size:0.8em;}
-@media(max-width:650px){.readings-wrap{grid-template-columns:1fr;}.info-grid{grid-template-columns:repeat(2,1fr);}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a1a2e;min-height:100vh}
+.pin-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)}
+.pin-box{background:white;border-radius:20px;padding:40px;text-align:center;width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.pin-logo{font-size:48px;margin-bottom:16px;color:#0f3460;font-weight:700}
+.pin-title{font-size:22px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.pin-sub{font-size:13px;color:#6c757d;margin-bottom:24px}
+.pin-display{background:#f8f9fa;border-radius:12px;padding:16px;margin-bottom:20px;letter-spacing:12px;font-size:28px;font-weight:700;color:#1a1a2e;min-height:64px;display:flex;align-items:center;justify-content:center}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.pin-btn{background:#f8f9fa;border:2px solid #e9ecef;border-radius:10px;padding:16px;font-size:20px;font-weight:600;cursor:pointer;transition:all 0.15s}
+.pin-btn:hover{background:#e9ecef;border-color:#adb5bd}
+.pin-btn:active{transform:scale(0.95)}
+.pin-btn-wide{grid-column:span 3}
+.pin-hint{font-size:12px;color:#adb5bd;margin-top:8px}
+.container{max-width:1000px;margin:0 auto;padding:20px}
+.top-bar{background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:16px;padding:20px 24px;margin-bottom:20px}
+.top-bar h1{font-size:20px;font-weight:700}
+.top-bar p{font-size:13px;opacity:0.8;margin-top:4px}
+.refresh-bar{background:white;border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.refresh-info{font-size:13px;color:#6c757d}
+.refresh-btn{background:#0f3460;color:white;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.refresh-btn:hover{background:#1a1a2e}
+.refresh-btn:disabled{background:#adb5bd;cursor:not-allowed}
+.section-title{font-size:16px;font-weight:700;color:#1a1a2e;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #e9ecef}
+.new-badge{background:#28a745;color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle}
+.report-card{background:white;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.report-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.report-date{font-size:18px;font-weight:700;color:#1a1a2e}
+.nurse-badge{background:#0f3460;color:white;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}
+.shift-badge{background:#e9ecef;color:#495057;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}
+.condition-box{border-radius:12px;padding:14px 20px;margin-bottom:16px;font-size:15px;font-weight:600;text-align:center}
+.condition-improving{background:#d4edda;color:#155724}
+.condition-stable{background:#fff3cd;color:#856404}
+.condition-declining{background:#f8d7da;color:#721c24}
+.section-header{font-size:12px;font-weight:700;color:#6c757d;text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px}
+.vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.vital-card{border-radius:10px;padding:12px;text-align:center;border:2px solid #e9ecef}
+.vital-card.red-bdr{border-color:#dc3545;background:#fff5f5}
+.vital-card.grn-bdr{border-color:#28a745;background:#f0fff4}
+.vital-card.ylw-bdr{border-color:#ffc107;background:#fffdf0}
+.vital-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6c757d;margin-bottom:4px}
+.vital-value{font-size:20px;font-weight:700;color:#1a1a2e}
+.vital-unit{font-size:11px;color:#adb5bd}
+.vital-status{display:inline-block;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700;margin-top:4px}
+.s-normal{background:#d4edda;color:#155724}
+.s-elevated{background:#d4edda;color:#155724}
+.s-high{background:#fff3cd;color:#856404}
+.s-high-stage-1{background:#fff3cd;color:#856404}
+.s-very-high,.s-critical,.s-low{background:#f8d7da;color:#721c24}
+.s-low-fever{background:#fff3cd;color:#856404}
+.s-fever{background:#f8d7da;color:#721c24}
+.reading-hdr{font-size:12px;font-weight:700;color:#0f3460;text-transform:uppercase;letter-spacing:1px;margin:12px 0 8px;padding:6px 10px;background:#e8eef7;border-radius:6px}
+.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+.detail-item{background:#f8f9fa;border-radius:8px;padding:10px 14px}
+.detail-label{font-size:11px;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:2px}
+.detail-value{font-size:14px;color:#1a1a2e;font-weight:600}
+.comments-box{background:#f8f9fa;border-radius:10px;padding:14px;margin-top:8px}
+.comments-text{font-size:14px;color:#1a1a2e;line-height:1.5}
+.footer{text-align:center;padding:20px;color:#adb5bd;font-size:12px;margin-top:10px}
+@media(max-width:600px){.vitals-grid{grid-template-columns:repeat(2,1fr)}.detail-grid{grid-template-columns:1fr}.refresh-bar{flex-direction:column;gap:10px;align-items:flex-start}}
 </style>
 </head>
 <body>
 
-<div id="pin-screen">
-  <div class="pin-card">
-    <div class="pin-title">Family Health Portal</div>
-    <div class="pin-sub">Ambassador Olanrewaju Falola</div>
-    <div class="pin-dots">
-      <div class="pin-dot" id="d1"></div>
-      <div class="pin-dot" id="d2"></div>
-      <div class="pin-dot" id="d3"></div>
-      <div class="pin-dot" id="d4"></div>
-    </div>
-    <div class="pin-error" id="pe">&nbsp;</div>
+<div id="pin-screen" class="pin-screen">
+  <div class="pin-box">
+    <div class="pin-logo">+</div>
+    <div class="pin-title">Falola Health Portal</div>
+    <div class="pin-sub">Family Access Only</div>
+    <div class="pin-display" id="pin-display">----</div>
     <div class="pin-grid">
       <button class="pin-btn" onclick="pp('1')">1</button>
       <button class="pin-btn" onclick="pp('2')">2</button>
@@ -97,23 +85,22 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
       <button class="pin-btn" onclick="pp('7')">7</button>
       <button class="pin-btn" onclick="pp('8')">8</button>
       <button class="pin-btn" onclick="pp('9')">9</button>
-      <button class="pin-btn" onclick="pd()">Del</button>
       <button class="pin-btn" onclick="pp('0')">0</button>
-      <button class="pin-btn" onclick="pc()">Clr</button>
+      <button class="pin-btn pin-btn-wide" onclick="pc()">Clr</button>
     </div>
     <div class="pin-hint">Enter your 4-digit family PIN</div>
   </div>
 </div>
 
-<div id="main-content">
+<div id="main-content" style="display:none">
   <div class="container">
     <div class="top-bar">
-      <button class="lock-btn" onclick="lockScreen()">Lock</button>
+      <h1>Ambassador Olanrewaju Falola</h1>
+      <p>Daily Nursing Report - Family Health Portal</p>
     </div>
-    <div class="header">
-      <h1>Ambassador Falola</h1>
-      <p>Daily Health Updates &mdash; Family Portal</p>
-      <div class="header-sub" id="lu">Loading latest data...</div>
+    <div class="refresh-bar">
+      <div class="refresh-info" id="refresh-status">Click the button to check for new reports</div>
+      <button class="refresh-btn" id="refresh-btn" onclick="fetchLive()">Check for New Reports</button>
     </div>
     <div id="live-section"></div>
     <div id="history-section"></div>
@@ -125,216 +112,175 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
 </div>
 
 <script>
-var PIN = '0226';
-var ent = '';
-var CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQIWWR_VAieTrjboqkegpPjZP43qakEavJfFHaA-lyY5BG1vrAEeBBllehO9gAKLGosI-eIBlXUZKfg/pub?gid=142658432&single=true&output=csv';
+var PIN='0226';
+var CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQIWWR_VAieTrjboqkegpPjZP43qakEavJfFHaA-lyY5BG1vrAEeBBllehO9gAKLGosI-eIBlXUZKfg/pub?gid=142658432&single=true&output=csv';
+var HDATES=['2/22/2026','2/23/2026','2/24/2026','2/25/2026','2/26/2026','2/27/2026','2/28/2026'];
+var ent='';
 
-// Dates already in the hard-coded history (to avoid showing duplicates from the live feed)
-var HISTORY_DATES = ['2/22/2026','2/23/2026','2/24/2026','2/25/2026','2/26/2026','2/27/2026'];
+function pp(d){if(ent.length<4){ent+=d;ud();}}
+function pc(){ent='';ud();}
+function ud(){
+  var s=ent.padEnd(4,'-').split('').map(function(c){return c==='-'?'-':'*';}).join(' ');
+  document.getElementById('pin-display').textContent=s;
+  if(ent.length===4){
+    if(ent===PIN){
+      document.getElementById('pin-screen').style.display='none';
+      document.getElementById('main-content').style.display='block';
+      ent='';
+      renderHistory();
+    } else {
+      document.getElementById('pin-display').textContent='Wrong PIN';
+      setTimeout(function(){ent='';ud();},1200);
+    }
+  }
+}
+document.addEventListener('keydown',function(e){
+  if(document.getElementById('pin-screen').style.display!=='none'){
+    if(e.key>='0'&&e.key<='9')pp(e.key);
+    else if(e.key==='Backspace'||e.key==='Delete'||e.key==='Escape')pc();
+  }
+});
 
-var HISTORY = [
-  {date:'Friday, 27 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',dialysisNote:'',
-   r1:{time:'6:00am',sbp:184,dbp:82,hr:80,rr:12,temp:37.0,spo2:82,gluc:4.2},
-   r2:{time:'7:15pm',sbp:137,dbp:61,hr:104,rr:null,temp:37.5,spo2:89,gluc:4.6},
-   r3:{time:'10:00pm',sbp:147,dbp:60,hr:97,rr:16,temp:37.1,spo2:80,gluc:null},
-   feed:'1050 mls',water:'Yes',urine:'Normal',stool:'Once',meds:'All given as prescribed',
-   wound:'Sacrum',wsize:'3cm x 2cm',wdrain:'Mild',
-   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-   alerts:'SpO2 below 92%, SpO2 below 90%, SBP above 170',alertDetail:'SpO2 today ranged 80-89%; SBP ranged 184-137',
-   overall:'Improving',notes:"Today was Baba's dialysis appointment which was successful."},
-  {date:'Thursday, 26 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',dialysisNote:'',
-   r1:{time:'6:10am',sbp:170,dbp:83,hr:78,rr:14,temp:36.8,spo2:90,gluc:4.0},
-   r2:{time:'10:03am',sbp:136,dbp:54,hr:103,rr:null,temp:36.8,spo2:73,gluc:null},
-   r3:{time:'7:40pm',sbp:128,dbp:60,hr:91,rr:20,temp:36.9,spo2:82,gluc:null},
-   feed:'1050 mls',water:'Yes',urine:'Normal',stool:'Once',meds:'All given as prescribed',
-   wound:'Sacrum',wsize:'3cm x 2cm',wdrain:'Mild',
-   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-   alerts:'SpO2 below 92%, SpO2 below 90%',alertDetail:'SpO2 today ranged 73-90%',
-   overall:'Improving',notes:'Nasogastric Tube (NG Tube) removed. Initiated feeding by mouth and well tolerated.'},
-  {date:'Wednesday, 25 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',dialysisNote:'',
-   r1:{time:'7:00am',sbp:154,dbp:72,hr:91,rr:16,temp:36.7,spo2:80,gluc:4.5},
-   r2:{time:'10:30am',sbp:123,dbp:57,hr:84,rr:null,temp:36.4,spo2:84,gluc:null},
-   r3:{time:'3:40pm',sbp:164,dbp:77,hr:81,rr:16,temp:37.0,spo2:83,gluc:null},
-   feed:'1050 mls',water:'Yes',urine:'Normal',stool:'Once',meds:'All given as prescribed',
-   wound:'Sacrum',wsize:'3cm x 2cm',wdrain:'Mild',
-   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-   alerts:'SpO2 below 92%, SpO2 below 90%',alertDetail:'SBP today ranged 123-164',
-   overall:'Improving',notes:'Partial response to movement, verbalisation and sensory perception.'},
-  {date:'Tuesday, 24 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',dialysisNote:'Edema on both hands noted',
-   r1:{time:'6:05am',sbp:189,dbp:81,hr:79,rr:16,temp:37.1,spo2:82,gluc:4.0},
-   r2:{time:'7:00am',sbp:181,dbp:86,hr:84,rr:null,temp:37.3,spo2:85,gluc:null},
-   r3:{time:'10:00am',sbp:170,dbp:87,hr:99,rr:12,temp:36.5,spo2:80,gluc:4.6},
-   feed:'700 mls',water:'Yes (300 mls)',urine:'Normal',stool:'Twice',meds:'All given as prescribed',
-   wound:'Sacrum',wsize:'3cm x 2cm',wdrain:'Mild',
-   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-   alerts:'SpO2 below 92%, SpO2 below 90%, SBP above 170, Dialysis complication',alertDetail:'SBP ranged 189-170; Temperature ranged 37.3-36.5',
-   overall:'Improving',notes:'Patient receiving minimal feeding and water through the mouth. Partial movement from extremities and partial verbalisation.'},
-  {date:'Monday, 23 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',dialysisNote:'',
-   r1:{time:'6:00am',sbp:174,dbp:78,hr:95,rr:18,temp:37.2,spo2:99,gluc:4.3},
-   r2:{time:'10:02am',sbp:122,dbp:57,hr:89,rr:null,temp:36.7,spo2:89,gluc:null},
-   r3:{time:'3:05pm',sbp:154,dbp:69,hr:78,rr:14,temp:36.8,spo2:80,gluc:null},
-   feed:'300-350 mls',water:'Yes',urine:'Normal',stool:'Once',meds:'All given as prescribed',
-   wound:'Sacral area / Base of spine (Buttocks)',wsize:'3cm x 2cm',wdrain:'Mild',
-   wcare:'Repositioned every 2 hours, Air mattress functioning, Compression socks worn, Passive limb movement done',
-   alerts:'SpO2 below 92%, SpO2 below 90%, SBP above 170',alertDetail:'SpO2 ranged 80-99%; SBP ranged 122-174',
-   overall:'Improving',notes:'Encouraging oral feeding through the mouth. Baba tolerated meal with no complications.'},
-  {date:'Sunday, 22 February 2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',dialysisNote:'',
-   r1:{time:'Morning',sbp:150,dbp:85,hr:90,rr:null,temp:null,spo2:91,gluc:null},r2:null,r3:null,
-   feed:'-',water:'-',urine:'-',stool:'-',meds:'-',wound:'-',wsize:'-',wdrain:'-',wcare:'',
-   alerts:'',alertDetail:'',overall:'Stable',notes:'Initial report - baseline vitals recorded.'}
-];
-
-// PIN logic
-function ud(){for(var i=1;i<=4;i++)document.getElementById('d'+i).className='pin-dot'+(ent.length>=i?' filled':'');}
-function pp(d){if(ent.length>=4)return;ent+=d;ud();document.getElementById('pe').innerHTML='&nbsp;';if(ent.length===4)setTimeout(cp,200);}
-function pd(){ent=ent.slice(0,-1);ud();}
-function pc(){ent='';ud();document.getElementById('pe').innerHTML='&nbsp;';}
-function cp(){if(ent===PIN){document.getElementById('pin-screen').style.display='none';document.getElementById('main-content').style.display='block';sessionStorage.setItem('fa','1');init();}else{document.getElementById('pe').textContent='Incorrect PIN. Try again.';ent='';ud();}}
-function lockScreen(){sessionStorage.removeItem('fa');document.getElementById('main-content').style.display='none';document.getElementById('pin-screen').style.display='flex';ent='';ud();}
-document.addEventListener('keydown',function(e){if(document.getElementById('pin-screen').style.display!=='none'){if(e.key>='0'&&e.key<='9')pp(e.key);else if(e.key==='Backspace')pd();else if(e.key==='Escape')pc();}});
-if(sessionStorage.getItem('fa')==='1'){document.getElementById('pin-screen').style.display='none';document.getElementById('main-content').style.display='block';init();}
-
-// Status helpers
-function bpSt(s,d){if(!s||!d)return{c:'',l:'',lc:''};if(s>=180||d>=120)return{c:'alert-card',l:'Very High',lc:'s-high'};if(s>=140||d>=90)return{c:'warn-card',l:'High',lc:'s-high'};if(s<90||d<60)return{c:'warn-card',l:'Low',lc:'s-low'};return{c:'good-card',l:'Normal',lc:'s-normal'};}
-function o2St(v){if(!v)return{c:'',l:'',lc:''};if(v<90)return{c:'alert-card',l:'Critical',lc:'s-high'};if(v<95)return{c:'warn-card',l:'Low',lc:'s-watch'};return{c:'good-card',l:'Normal',lc:'s-normal'};}
-function hrSt(v){if(!v)return{l:'',lc:''};if(v>100)return{l:'High',lc:'s-high'};if(v<60)return{l:'Low',lc:'s-low'};return{l:'Normal',lc:'s-normal'};}
-function tpSt(v){if(!v)return{l:'',lc:''};if(v>=38)return{l:'Fever',lc:'s-high'};if(v<36)return{l:'Low',lc:'s-low'};return{l:'Normal',lc:'s-normal'};}
-function condSt(c){var l=(c||'').toLowerCase();if(l.includes('improv'))return{cl:'cond-good',tx:'Improving'};if(l.includes('stable'))return{cl:'cond-stable',tx:'Stable'};if(l.includes('good'))return{cl:'cond-good',tx:'Good'};if(l.includes('fair'))return{cl:'cond-fair',tx:'Fair'};if(l.includes('poor')||l.includes('critical'))return{cl:'cond-concern',tx:'Concern'};return{cl:'cond-stable',tx:c||'Stable'};}
-function vc(css,label,val,unit,sl,slc){return'<div class="vcard '+css+'"><div class="vlabel">'+label+'</div><div class="vval">'+(val!=null&&val!==''?val:'-')+'</div><div class="vunit">'+unit+'</div>'+(sl?'<span class="vstatus '+slc+'">'+sl+'</span>':'')+'</div>';}
-function ic(label,val){return'<div class="icard"><div class="ilabel">'+label+'</div><div class="ival">'+(val&&val!==''?val:'-')+'</div></div>';}
-function nn(v){return(v&&v!=='Nil'&&v!=='Nill'&&v!=='nil'&&v.trim()!=='')?v:'';}
-function num(v){var n=parseFloat(v);return isNaN(n)?null:n;}
-
-// Render a single reading block from an object
-function renderRO(r){
-  if(!r)return'';
-  var bp=bpSt(r.sbp,r.dbp),o2=o2St(r.spo2),hr=hrSt(r.hr),tp=tpSt(r.temp);
-  return vc(bp.c,'Blood Pressure',(r.sbp&&r.dbp?r.sbp+'/'+r.dbp:''),'mmHg',bp.l,bp.lc)+
-    vc('','Heart Rate',r.hr,'bpm',hr.l,hr.lc)+
-    vc(o2.c,'SpO2',r.spo2,'%',o2.l,o2.lc)+
-    (r.temp?vc('','Temperature',r.temp.toFixed(1),'&deg;C',tp.l,tp.lc):'')+
-    (r.rr?vc('','Resp. Rate',r.rr,'br/min','',''):'')+
-    (r.gluc?vc('','Blood Sugar',r.gluc,'mmol/L','',''):'');
+function parseCSV(text){
+  var lines=[];var cur='';var inq=false;
+  for(var i=0;i<text.length;i++){
+    var c=text[i];
+    if(c==='"'){inq=!inq;}
+    else if(c==='
+'&&!inq){lines.push(cur);cur='';}
+    else if(c!==''){cur+=c;}
+  }
+  if(cur)lines.push(cur);
+  return lines.map(function(line){
+    var fields=[];var f='';var iq=false;
+    for(var i=0;i<line.length;i++){
+      var ch=line[i];
+      if(ch==='"'){iq=!iq;}
+      else if(ch===','&&!iq){fields.push(f.trim());f='';}
+      else{f+=ch;}
+    }
+    fields.push(f.trim());
+    return fields;
+  });
 }
 
-// Render a report card from structured object (used for history)
-function renderCard(rep,isLive){
-  var cs=condSt(rep.overall);
-  var h='<div class="report-card'+(isLive?' live-entry':'')+'"><div class="report-header"><div class="report-date">'+rep.date+'</div><div class="badges"><div class="nurse-badge">'+rep.nurse+'</div><div class="shift-badge">'+rep.shift+'</div>'+(isLive?'<div class="new-badge">NEW</div>':'')+'</div></div>';
-  h+='<div class="condition-banner '+cs.cl+'">Overall Condition: <strong>'+cs.tx+'</strong></div>';
-  h+='<div class="sec-title">Vital Signs</div><div class="readings-wrap">';
-  if(rep.r1)h+='<div class="reading-block"><h4>Reading 1 &mdash; '+rep.r1.time+'</h4><div class="vitals-grid">'+renderRO(rep.r1)+'</div></div>';
-  if(rep.r2)h+='<div class="reading-block"><h4>Reading 2 &mdash; '+rep.r2.time+'</h4><div class="vitals-grid">'+renderRO(rep.r2)+'</div></div>';
-  if(rep.r3)h+='<div class="reading-block"><h4>Reading 3 &mdash; '+rep.r3.time+'</h4><div class="vitals-grid">'+renderRO(rep.r3)+'</div></div>';
-  h+='</div>';
-  if(rep.dialysis==='Yes')h+='<div class="dialysis-box"><div class="sec-title">Dialysis</div><p style="font-size:.9em;color:#444">Dialysis today: <strong>Yes</strong>'+(rep.dialysisNote?' &mdash; '+rep.dialysisNote:'')+'</p></div>';
-  if(rep.feed&&rep.feed!=='-')h+='<div class="sec-title">Nutrition &amp; Fluids</div><div class="info-grid">'+ic('Blenderized Feed',rep.feed)+ic('Free Water',rep.water)+ic('Urine Output',rep.urine)+ic('Stool',rep.stool)+'</div>';
-  if(rep.wound&&rep.wound!=='-')h+='<div class="sec-title">Wound Care</div><div class="note-box"><strong>Location:</strong> '+rep.wound+'<br><strong>Size:</strong> '+rep.wsize+' &nbsp;|&nbsp; <strong>Drainage:</strong> '+rep.wdrain+(rep.wcare?'<br><strong>Care Done:</strong> '+rep.wcare:'')+'</div>';
-  if(rep.alerts)h+='<div class="alert-box"><div class="sec-title">Flagged Events</div><p><strong>Alerts:</strong> '+rep.alerts+'</p>'+(rep.alertDetail?'<p>'+rep.alertDetail+'</p>':'')+'</div>';
-  if(rep.notes)h+='<div class="sec-title">Nurse Notes</div><div class="note-box">'+rep.notes+'</div>';
+function bpC(s){var v=parseInt(s)||0;return v<120?'grn-bdr':v<140?'ylw-bdr':'red-bdr';}
+function bpS(s){var v=parseInt(s)||0;if(v<120)return 'Normal';if(v<130)return 'Elevated';if(v<140)return 'High Stage 1';if(v<180)return 'High';return 'Very High';}
+function puC(p){var v=parseInt(p)||0;return(v>=60&&v<=100)?'grn-bdr':(v>=50&&v<=110)?'ylw-bdr':'red-bdr';}
+function puS(p){var v=parseInt(p)||0;if(v>=60&&v<=100)return 'Normal';if(v>100)return 'High';return 'Low';}
+function spC(s){var v=parseInt(s)||0;return v>=95?'grn-bdr':v>=90?'ylw-bdr':'red-bdr';}
+function spS(s){var v=parseInt(s)||0;if(v>=95)return 'Normal';if(v>=90)return 'Low';return 'Critical';}
+function tpC(t){var v=parseFloat(t)||0;return(v>=36.1&&v<=37.2)?'grn-bdr':(v>=37.3&&v<=38.0)?'ylw-bdr':'red-bdr';}
+function tpS(t){var v=parseFloat(t)||0;if(v>=36.1&&v<=37.2)return 'Normal';if(v>=37.3&&v<=38.0)return 'Low Fever';if(v>38.0)return 'Fever';return 'Low';}
+function cC(c){var l=(c||'').toLowerCase();if(l.indexOf('improv')>=0)return 'condition-improving';if(l.indexOf('declin')>=0)return 'condition-declining';return 'condition-stable';}
+
+function smartParse(r){
+  var cv=['Improving','Stable','Declining'];
+  var ci=-1;
+  for(var j=r.length-1;j>=50;j--){if(cv.indexOf(r[j])>=0){ci=j;break;}}
+  var wt=r[r.length-2]||'';
+  var cmts=ci>=0?r.slice(ci+1,r.length-2).join(' ').trim():'';
+  return {
+    date:r[1]||'',nurse:r[2]||'',shift:r[3]||'',dialysis:r[4]||'',
+    preDW:r[5]||'',postDW:r[6]||'',
+    r1time:r[8]||'',r1sbp:r[9]||'',r1dbp:r[10]||'',r1pulse:r[11]||'',r1rr:r[12]||'',r1temp:r[13]||'',r1spo2:r[14]||'',r1glucose:r[15]||'',
+    r2time:r[16]||'',r2sbp:r[17]||'',r2dbp:r[18]||'',r2pulse:r[19]||'',r2temp:r[20]||'',r2spo2:r[21]||'',r2glucose:r[22]||'',
+    r3time:r[23]||'',r3sbp:r[24]||'',r3dbp:r[25]||'',r3pulse:r[26]||'',r3rr:r[27]||'',r3temp:r[28]||'',r3spo2:r[29]||'',r3glucose:r[30]||'',
+    urine:r[39]||'',stool:r[40]||'',
+    condition:ci>=0?r[ci]:'',comments:cmts,
+    dailyWeight:(wt&&wt!='0')?wt:''
+  };
+}
+
+function rdgHTML(lbl,sbp,dbp,pulse,rr,temp,spo2,glucose){
+  if(!sbp&&!pulse&&!spo2)return '';
+  var h='<div class="reading-hdr">'+lbl+'</div><div class="vitals-grid">';
+  h+='<div class="vital-card '+bpC(sbp)+'"><div class="vital-label">BLOOD PRESSURE</div><div class="vital-value">'+(sbp&&dbp?parseFloat(sbp).toFixed(0)+'/'+parseFloat(dbp).toFixed(0):'--')+'</div><div class="vital-unit">mmHg</div><span class="vital-status s-'+bpS(sbp).toLowerCase().replace(/ /g,'-')+'">'+bpS(sbp)+'</span></div>';
+  h+='<div class="vital-card '+puC(pulse)+'"><div class="vital-label">PULSE</div><div class="vital-value">'+(pulse?parseFloat(pulse).toFixed(0):'--')+'</div><div class="vital-unit">bpm</div><span class="vital-status s-'+puS(pulse).toLowerCase()+'">'+puS(pulse)+'</span></div>';
+  h+='<div class="vital-card '+spC(spo2)+'"><div class="vital-label">SPO2</div><div class="vital-value">'+(spo2?parseFloat(spo2).toFixed(0):'--')+'</div><div class="vital-unit">%</div><span class="vital-status s-'+spS(spo2).toLowerCase()+'">'+spS(spo2)+'</span></div>';
+  h+='<div class="vital-card '+tpC(temp)+'"><div class="vital-label">TEMP</div><div class="vital-value">'+(temp||'--')+'</div><div class="vital-unit">Celsius</div><span class="vital-status s-'+tpS(temp).toLowerCase().replace(/ /g,'-')+'">'+tpS(temp)+'</span></div>';
+  if(rr)h+='<div class="vital-card"><div class="vital-label">RESP RATE</div><div class="vital-value">'+parseFloat(rr).toFixed(0)+'</div><div class="vital-unit">br/min</div></div>';
+  if(glucose&&glucose!='Nil')h+='<div class="vital-card"><div class="vital-label">BLOOD SUGAR</div><div class="vital-value">'+glucose+'</div><div class="vital-unit">mmol/L</div></div>';
   h+='</div>';
   return h;
 }
 
-// Parse CSV row into a report object (columns match Form Responses 1 sheet)
-// NOTE: Column 58 (Wound Photo) is intentionally NOT read or displayed
-function parseRow(cols){
-  return {
-    date: cols[1]||'',
-    nurse: cols[2]||'Nurse',
-    shift: cols[3]||'24 Hour',
-    dialysis: cols[4]||'No',
-    dialysisNote: nn(cols[7]),
-    r1: (cols[9]||cols[10]||cols[14]) ? {
-      time:cols[8]||'',sbp:num(cols[9]),dbp:num(cols[10]),hr:num(cols[11]),rr:num(cols[12]),temp:num(cols[13]),spo2:num(cols[14]),gluc:num(cols[15])
-    } : null,
-    r2: (cols[17]||cols[18]||cols[21]) ? {
-      time:cols[16]||'',sbp:num(cols[17]),dbp:num(cols[18]),hr:num(cols[19]),rr:null,temp:num(cols[20]),spo2:num(cols[21]),gluc:num(cols[22])
-    } : null,
-    r3: (cols[24]||cols[25]||cols[29]) ? {
-      time:cols[23]||'',sbp:num(cols[24]),dbp:num(cols[25]),hr:num(cols[26]),rr:num(cols[27]),temp:num(cols[28]),spo2:num(cols[29]),gluc:num(cols[30])
-    } : null,
-    feed: nn(cols[35])||'-',
-    water: nn(cols[36])||'-',
-    urine: nn(cols[39])||'-',
-    stool: nn(cols[40])||'-',
-    meds: nn(cols[41])||'-',
-    wound: nn(cols[45])||'-',
-    wsize: (nn(cols[46])&&nn(cols[47])) ? cols[46]+'cm x '+cols[47]+'cm' : '-',
-    wdrain: nn(cols[48])||'-',
-    wcare: nn(cols[50])||'',
-    alerts: nn(cols[51])||'',
-    alertDetail: nn(cols[52])||'',
-    overall: nn(cols[53])||'Stable',
-    notes: nn(cols[54])||''
-    // col[58] = Wound Photo - intentionally skipped
-  };
-}
-
-// Parse CSV text into array of arrays
-function parseCSV(text){
-  var rows=[],lines=text.split('\n');
-  for(var i=0;i<lines.length;i++){
-    var line=lines[i],row=[],q=false,c='';
-    for(var j=0;j<line.length;j++){
-      var ch=line[j];
-      if(ch==='"'){if(q&&line[j+1]==='"'){c+='"';j++;}else q=!q;}
-      else if(ch===','&&!q){row.push(c.trim());c='';}
-      else c+=ch;
-    }
-    row.push(c.trim());
-    if(row.some(function(x){return x.trim()!=='';}))rows.push(row);
+function buildCard(d,isNew){
+  var h='<div class="report-card">';
+  h+='<div class="report-header">';
+  var ds=d.date;
+  try{var dt=new Date(d.date);if(!isNaN(dt))ds=dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}catch(e){}
+  h+='<div class="report-date">'+ds+(isNew?'<span class="new-badge">NEW</span>':'')+'</div>';
+  h+='<div style="display:flex;gap:8px"><span class="nurse-badge">'+d.nurse+'</span><span class="shift-badge">'+d.shift+'</span></div>';
+  h+='</div>';
+  if(d.condition)h+='<div class="condition-box '+cC(d.condition)+'">Overall Condition: '+d.condition+'</div>';
+  h+='<div class="section-header">Vital Signs</div>';
+  h+=rdgHTML('Reading 1 - '+d.r1time,d.r1sbp,d.r1dbp,d.r1pulse,d.r1rr,d.r1temp,d.r1spo2,d.r1glucose);
+  h+=rdgHTML('Reading 2 - '+d.r2time,d.r2sbp,d.r2dbp,d.r2pulse,'',d.r2temp,d.r2spo2,d.r2glucose);
+  h+=rdgHTML('Reading 3 - '+d.r3time,d.r3sbp,d.r3dbp,d.r3pulse,d.r3rr,d.r3temp,d.r3spo2,d.r3glucose);
+  if(d.dailyWeight){h+='<div class="section-header">Daily Weight</div><div class="detail-grid"><div class="detail-item"><div class="detail-label">Weight</div><div class="detail-value">'+d.dailyWeight+' kg</div></div></div>';}
+  if(d.dialysis==='Yes'&&(d.preDW||d.postDW)){
+    h+='<div class="section-header">Dialysis Weights</div><div class="detail-grid">';
+    if(d.preDW&&d.preDW.toLowerCase()!=='nil')h+='<div class="detail-item"><div class="detail-label">Pre-Dialysis</div><div class="detail-value">'+d.preDW+' kg</div></div>';
+    if(d.postDW&&d.postDW.toLowerCase()!=='nil')h+='<div class="detail-item"><div class="detail-label">Post-Dialysis</div><div class="detail-value">'+d.postDW+' kg</div></div>';
+    h+='</div>';
   }
-  return rows;
+  if(d.urine||d.stool){
+    h+='<div class="section-header">Output</div><div class="detail-grid">';
+    if(d.urine)h+='<div class="detail-item"><div class="detail-label">Urine</div><div class="detail-value">'+d.urine+'</div></div>';
+    if(d.stool)h+='<div class="detail-item"><div class="detail-label">Stool</div><div class="detail-value">'+d.stool+'</div></div>';
+    h+='</div>';
+  }
+  if(d.comments){h+='<div class="section-header">Nurse Notes</div><div class="comments-box"><div class="comments-text">'+d.comments+'</div></div>';}
+  h+='</div>';
+  return h;
 }
 
-// Format a raw date string like "2/28/2026" into display format
-function fmtDate(d){
-  try{
-    var parts=d.split('/');
-    var dt=new Date(parts[2],parts[0]-1,parts[1]);
-    return dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  }catch(e){return d;}
-}
-
-function init(){
-  // Render history immediately
-  var hh='<div class="section-divider">Previous Reports (22 - 27 Feb 2026)</div>';
-  for(var i=0;i<HISTORY.length;i++) hh+=renderCard(HISTORY[i],false);
-  document.getElementById('history-section').innerHTML=hh;
-
-  // Show loading for live section
-  document.getElementById('live-section').innerHTML='<div class="loading-bar"><div class="spinner"></div>Checking for new reports...</div>';
-
-  // Fetch live data
+function fetchLive(){
+  var btn=document.getElementById('refresh-btn');
+  var st=document.getElementById('refresh-status');
+  btn.disabled=true;btn.textContent='Checking...';
+  st.textContent='Fetching latest data from Google Sheets...';
   fetch(CSV+'&t='+Date.now())
     .then(function(r){return r.text();})
     .then(function(text){
       var rows=parseCSV(text);
       var newRows=[];
       for(var i=rows.length-1;i>=1;i--){
-        var rawDate=(rows[i][1]||'').trim();
-        // Only show rows NOT already in the hard-coded history
-        if(rawDate && HISTORY_DATES.indexOf(rawDate)===-1){
-          var rep=parseRow(rows[i]);
-          rep.date=fmtDate(rawDate);
-          newRows.push(rep);
-        }
+        var rd=(rows[i][1]||'').trim();
+        if(rd&&HDATES.indexOf(rd)<0)newRows.push(rows[i]);
       }
-      var lh='';
+      var ld=document.getElementById('live-section');
       if(newRows.length>0){
-        lh='<div class="section-divider">New Reports</div>';
-        for(var j=0;j<newRows.length;j++) lh+=renderCard(newRows[j],true);
-        document.getElementById('lu').textContent='Last updated: '+new Date().toLocaleString();
+        var h='<div class="section-title">New Reports <span class="new-badge">'+newRows.length+'</span></div>';
+        newRows.forEach(function(row){h+=buildCard(smartParse(row),true);});
+        ld.innerHTML=h;
       } else {
-        document.getElementById('lu').textContent='Records from 22 Feb 2026 - No new entries yet';
+        ld.innerHTML='<div class="report-card" style="text-align:center;color:#6c757d;padding:30px">No new entries since 28 February 2026</div>';
       }
-      document.getElementById('live-section').innerHTML=lh;
+      var now=new Date();
+      var ts=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      st.textContent='Last checked: '+ts+' -- '+(newRows.length>0?newRows.length+' new report(s)':'No new reports');
+      btn.disabled=false;btn.textContent='Refresh Again';
     })
     .catch(function(){
-      document.getElementById('live-section').innerHTML='';
-      document.getElementById('lu').textContent='Records from 22 Feb 2026';
+      st.textContent='Could not fetch data. Check connection and try again.';
+      btn.disabled=false;btn.textContent='Try Again';
     });
+}
+
+function renderHistory(){
+  document.getElementById('history-section').innerHTML='<div class="section-title" style="margin-top:20px">Previous Reports (22 - 28 Feb 2026)</div>'+histCards();
+}
+
+function histCards(){
+return buildCard({date:'2/22/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'',postDW:'',r1time:'6:00am',r1sbp:'150',r1dbp:'85',r1pulse:'90',r1rr:'',r1temp:'',r1spo2:'91',r1glucose:'',r2time:'',r2sbp:'',r2dbp:'',r2pulse:'',r2temp:'',r2spo2:'',r2glucose:'',r3time:'',r3sbp:'',r3dbp:'',r3pulse:'',r3rr:'',r3temp:'',r3spo2:'',r3glucose:'',urine:'',stool:'',condition:'',comments:'',dailyWeight:''},false)+
+buildCard({date:'2/23/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'',postDW:'',r1time:'6:00am',r1sbp:'174',r1dbp:'78',r1pulse:'95',r1rr:'',r1temp:'37.20',r1spo2:'99',r1glucose:'',r2time:'7:15pm',r2sbp:'122',r2dbp:'57',r2pulse:'89',r2temp:'36.70',r2spo2:'89',r2glucose:'',r3time:'10:00pm',r3sbp:'154',r3dbp:'69',r3pulse:'78',r3rr:'',r3temp:'36.80',r3spo2:'80',r3glucose:'',urine:'Normal',stool:'',condition:'Improving',comments:'I encouraging oral feeding through the mouth and Baba tolerated meal with no complications',dailyWeight:''},false)+
+buildCard({date:'2/24/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',preDW:'Nil',postDW:'Nil',r1time:'6:05am',r1sbp:'189',r1dbp:'81',r1pulse:'79',r1rr:'16',r1temp:'37.10',r1spo2:'82',r1glucose:'4.00',r2time:'7:00pm',r2sbp:'181',r2dbp:'86',r2pulse:'84',r2temp:'37.30',r2spo2:'85',r2glucose:'Nil',r3time:'10:00am',r3sbp:'170',r3dbp:'87',r3pulse:'99',r3rr:'12',r3temp:'36.50',r3spo2:'80',r3glucose:'4.60',urine:'Normal',stool:'Twice',condition:'Improving',comments:'Patient recieving minimal feeding and water through the mouth, partially movement From the extremities and partially verbalisation',dailyWeight:''},false)+
+buildCard({date:'2/25/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'Nil',postDW:'Nil',r1time:'6:00am',r1sbp:'154',r1dbp:'72',r1pulse:'91',r1rr:'16',r1temp:'36.70',r1spo2:'80',r1glucose:'4.00',r2time:'7:00pm',r2sbp:'123',r2dbp:'57',r2pulse:'84',r2temp:'36.40',r2spo2:'84',r2glucose:'Nil',r3time:'10:00pm',r3sbp:'164',r3dbp:'77',r3pulse:'81',r3rr:'16',r3temp:'37.00',r3spo2:'83',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Partial response to movement, verbalisation and sensory perception',dailyWeight:''},false)+
+buildCard({date:'2/26/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'Nil',postDW:'Nil',r1time:'6:00am',r1sbp:'170',r1dbp:'83',r1pulse:'78',r1rr:'14',r1temp:'36.80',r1spo2:'90',r1glucose:'4.00',r2time:'7:00pm',r2sbp:'137',r2dbp:'71',r2pulse:'73',r2temp:'36.90',r2spo2:'85',r2glucose:'Nil',r3time:'10:00pm',r3sbp:'131',r3dbp:'63',r3pulse:'90',r3rr:'18',r3temp:'36.90',r3spo2:'83',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Nasogastric Tube (NG Tube) removed, initiated feeding by mouth and well tolerated.',dailyWeight:''},false)+
+buildCard({date:'2/27/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'Yes',preDW:'Nil',postDW:'Nil',r1time:'6:00am',r1sbp:'184',r1dbp:'82',r1pulse:'80',r1rr:'12',r1temp:'37.00',r1spo2:'82',r1glucose:'4.20',r2time:'7:15pm',r2sbp:'137',r2dbp:'61',r2pulse:'104',r2temp:'37.50',r2spo2:'89',r2glucose:'4.60',r3time:'10:00pm',r3sbp:'147',r3dbp:'60',r3pulse:'97',r3rr:'16',r3temp:'37.10',r3spo2:'80',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Today was Baba appointment which was successful',dailyWeight:''},false)+
+buildCard({date:'2/28/2026',nurse:'Nurse Pius',shift:'24 Hour',dialysis:'No',preDW:'',postDW:'',r1time:'6:00am',r1sbp:'187',r1dbp:'91',r1pulse:'107',r1rr:'14',r1temp:'37.20',r1spo2:'85',r1glucose:'4.5',r2time:'9:00am',r2sbp:'120',r2dbp:'58',r2pulse:'91',r2temp:'36.90',r2spo2:'82',r2glucose:'5.8',r3time:'5:50am',r3sbp:'171',r3dbp:'78',r3pulse:'88',r3rr:'14',r3temp:'36.50',r3spo2:'83',r3glucose:'Nil',urine:'Normal',stool:'Once',condition:'Improving',comments:'Improvement on sensory responses',dailyWeight:''},false);
 }
 </script>
 </body>
