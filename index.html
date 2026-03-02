@@ -5,108 +5,53 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Falola Family Health Portal</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a1a2e;min-height:100vh}
-.pin-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)}
-.pin-box{background:white;border-radius:20px;padding:40px;text-align:center;width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
-.pin-logo{font-size:48px;margin-bottom:16px;color:#0f3460;font-weight:700}
-.pin-title{font-size:22px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
-.pin-sub{font-size:13px;color:#6c757d;margin-bottom:24px}
-.pin-display{background:#f8f9fa;border-radius:12px;padding:16px;margin-bottom:20px;letter-spacing:12px;font-size:28px;font-weight:700;color:#1a1a2e;min-height:64px;display:flex;align-items:center;justify-content:center}
-.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.pin-btn{background:#f8f9fa;border:2px solid #e9ecef;border-radius:10px;padding:16px;font-size:20px;font-weight:600;cursor:pointer;transition:all 0.15s}
-.pin-btn:hover{background:#e9ecef;border-color:#adb5bd}
-.pin-btn:active{transform:scale(0.95)}
-.pin-btn-wide{grid-column:span 3}
-.pin-hint{font-size:12px;color:#adb5bd;margin-top:8px}
-.container{max-width:1000px;margin:0 auto;padding:20px}
-.top-bar{background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:16px;padding:20px 24px;margin-bottom:20px}
-.top-bar h1{font-size:20px;font-weight:700}
-.top-bar p{font-size:13px;opacity:0.8;margin-top:4px}
-.refresh-bar{background:white;border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-.refresh-info{font-size:13px;color:#6c757d}
-.refresh-btn{background:#0f3460;color:white;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
-.refresh-btn:hover{background:#1a1a2e}
-.refresh-btn:disabled{background:#adb5bd;cursor:not-allowed}
-.section-title{font-size:16px;font-weight:700;color:#1a1a2e;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #e9ecef}
-.new-badge{background:#28a745;color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle}
-.report-card{background:white;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-.report-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
-.report-date{font-size:18px;font-weight:700;color:#1a1a2e}
-.nurse-badge{background:#0f3460;color:white;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}
-.shift-badge{background:#e9ecef;color:#495057;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}
-.condition-box{border-radius:12px;padding:14px 20px;margin-bottom:16px;font-size:15px;font-weight:600;text-align:center}
-.condition-improving{background:#d4edda;color:#155724}
-.condition-stable{background:#fff3cd;color:#856404}
-.condition-declining{background:#f8d7da;color:#721c24}
-.section-header{font-size:12px;font-weight:700;color:#6c757d;text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px}
-.vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-.vital-card{border-radius:10px;padding:12px;text-align:center;border:2px solid #e9ecef}
-.vital-card.red-bdr{border-color:#dc3545;background:#fff5f5}
-.vital-card.grn-bdr{border-color:#28a745;background:#f0fff4}
-.vital-card.ylw-bdr{border-color:#ffc107;background:#fffdf0}
-.vital-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6c757d;margin-bottom:4px}
-.vital-value{font-size:20px;font-weight:700;color:#1a1a2e}
-.vital-unit{font-size:11px;color:#adb5bd}
-.vital-status{display:inline-block;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700;margin-top:4px}
-.s-normal,.s-elevated{background:#d4edda;color:#155724}
-.s-high,.s-high-stage-1,.s-low-fever{background:#fff3cd;color:#856404}
-.s-very-high,.s-critical,.s-low,.s-fever{background:#f8d7da;color:#721c24}
-.reading-hdr{font-size:12px;font-weight:700;color:#0f3460;text-transform:uppercase;letter-spacing:1px;margin:12px 0 8px;padding:6px 10px;background:#e8eef7;border-radius:6px}
-.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
-.detail-item{background:#f8f9fa;border-radius:8px;padding:10px 14px}
-.detail-label{font-size:11px;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:2px}
-.detail-value{font-size:14px;color:#1a1a2e;font-weight:600}
-.comments-box{background:#f8f9fa;border-radius:10px;padding:14px;margin-top:8px}
-.comments-text{font-size:14px;color:#1a1a2e;line-height:1.5}
-.footer{text-align:center;padding:20px;color:#adb5bd;font-size:12px;margin-top:10px}
-@media(max-width:600px){.vitals-grid{grid-template-columns:repeat(2,1fr)}.detail-grid{grid-template-columns:1fr}.refresh-bar{flex-direction:column;gap:10px;align-items:flex-start}}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a1a2e;min-height:100vh}.pin-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)}.pin-box{background:white;border-radius:20px;padding:40px;text-align:center;width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}.pin-logo{font-size:48px;margin-bottom:16px;color:#0f3460;font-weight:700}.pin-title{font-size:22px;font-weight:700;color:#1a1a2e;margin-bottom:6px}.pin-sub{font-size:13px;color:#6c757d;margin-bottom:24px}.pin-display{background:#f8f9fa;border-radius:12px;padding:16px;margin-bottom:20px;letter-spacing:12px;font-size:28px;font-weight:700;color:#1a1a2e;min-height:64px;display:flex;align-items:center;justify-content:center}.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.pin-btn{background:#f8f9fa;border:2px solid #e9ecef;border-radius:10px;padding:16px;font-size:20px;font-weight:600;cursor:pointer;transition:all 0.15s}.pin-btn:hover{background:#e9ecef;border-color:#adb5bd}.pin-btn:active{transform:scale(0.95)}.pin-btn-wide{grid-column:span 3}.pin-hint{font-size:12px;color:#adb5bd;margin-top:8px}.container{max-width:1000px;margin:0 auto;padding:20px}.top-bar{background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:16px;padding:20px 24px;margin-bottom:20px}.top-bar h1{font-size:20px;font-weight:700}.top-bar p{font-size:13px;opacity:0.8;margin-top:4px}.refresh-bar{background:white;border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.06)}.refresh-info{font-size:13px;color:#6c757d}.refresh-btn{background:#0f3460;color:white;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}.refresh-btn:hover{background:#1a1a2e}.refresh-btn:disabled{background:#adb5bd;cursor:not-allowed}.section-title{font-size:16px;font-weight:700;color:#1a1a2e;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #e9ecef}.new-badge{background:#28a745;color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle}.report-card{background:white;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}.report-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}.report-date{font-size:18px;font-weight:700;color:#1a1a2e}.nurse-badge{background:#0f3460;color:white;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}.shift-badge{background:#e9ecef;color:#495057;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}.condition-box{border-radius:12px;padding:14px 20px;margin-bottom:16px;font-size:15px;font-weight:600;text-align:center}.condition-improving{background:#d4edda;color:#155724}.condition-stable{background:#fff3cd;color:#856404}.condition-declining{background:#f8d7da;color:#721c24}.section-header{font-size:12px;font-weight:700;color:#6c757d;text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px}.vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}.vital-card{border-radius:10px;padding:12px;text-align:center;border:2px solid #e9ecef}.vital-card.red-bdr{border-color:#dc3545;background:#fff5f5}.vital-card.grn-bdr{border-color:#28a745;background:#f0fff4}.vital-card.ylw-bdr{border-color:#ffc107;background:#fffdf0}.vital-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6c757d;margin-bottom:4px}.vital-value{font-size:20px;font-weight:700;color:#1a1a2e}.vital-unit{font-size:11px;color:#adb5bd}.vital-status{display:inline-block;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700;margin-top:4px}.s-normal,.s-elevated{background:#d4edda;color:#155724}.s-high,.s-high-stage-1,.s-low-fever{background:#fff3cd;color:#856404}.s-very-high,.s-critical,.s-low,.s-fever{background:#f8d7da;color:#721c24}.reading-hdr{font-size:12px;font-weight:700;color:#0f3460;text-transform:uppercase;letter-spacing:1px;margin:12px 0 8px;padding:6px 10px;background:#e8eef7;border-radius:6px}.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}.detail-item{background:#f8f9fa;border-radius:8px;padding:10px 14px}.detail-label{font-size:11px;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:2px}.detail-value{font-size:14px;color:#1a1a2e;font-weight:600}.comments-box{background:#f8f9fa;border-radius:10px;padding:14px;margin-top:8px}.comments-text{font-size:14px;color:#1a1a2e;line-height:1.5}.footer{text-align:center;padding:20px;color:#adb5bd;font-size:12px;margin-top:10px}@media(max-width:600px){.vitals-grid{grid-template-columns:repeat(2,1fr)}.detail-grid{grid-template-columns:1fr}.refresh-bar{flex-direction:column;gap:10px;align-items:flex-start}}
 </style>
 </head>
 <body>
 <div id="pin-screen" class="pin-screen">
-  <div class="pin-box">
-    <div class="pin-logo">+</div>
-    <div class="pin-title">Falola Health Portal</div>
-    <div class="pin-sub">Family Access Only</div>
-    <div class="pin-display" id="pin-display">----</div>
-    <div class="pin-grid">
-      <button class="pin-btn" onclick="pp('1')">1</button>
-      <button class="pin-btn" onclick="pp('2')">2</button>
-      <button class="pin-btn" onclick="pp('3')">3</button>
-      <button class="pin-btn" onclick="pp('4')">4</button>
-      <button class="pin-btn" onclick="pp('5')">5</button>
-      <button class="pin-btn" onclick="pp('6')">6</button>
-      <button class="pin-btn" onclick="pp('7')">7</button>
-      <button class="pin-btn" onclick="pp('8')">8</button>
-      <button class="pin-btn" onclick="pp('9')">9</button>
-      <button class="pin-btn" onclick="pp('0')">0</button>
-      <button class="pin-btn pin-btn-wide" onclick="pc()">Clr</button>
-    </div>
-    <div class="pin-hint">Enter your 4-digit family PIN</div>
-  </div>
+<div class="pin-box">
+<div class="pin-logo">+</div>
+<div class="pin-title">Falola Health Portal</div>
+<div class="pin-sub">Family Access Only</div>
+<div class="pin-display" id="pin-display">----</div>
+<div class="pin-grid">
+<button class="pin-btn" onclick="pp('1')">1</button>
+<button class="pin-btn" onclick="pp('2')">2</button>
+<button class="pin-btn" onclick="pp('3')">3</button>
+<button class="pin-btn" onclick="pp('4')">4</button>
+<button class="pin-btn" onclick="pp('5')">5</button>
+<button class="pin-btn" onclick="pp('6')">6</button>
+<button class="pin-btn" onclick="pp('7')">7</button>
+<button class="pin-btn" onclick="pp('8')">8</button>
+<button class="pin-btn" onclick="pp('9')">9</button>
+<button class="pin-btn" onclick="pp('0')">0</button>
+<button class="pin-btn pin-btn-wide" onclick="pc()">Clr</button>
+</div>
+<div class="pin-hint">Enter your 4-digit family PIN</div>
+</div>
 </div>
 <div id="main-content" style="display:none">
-  <div class="container">
-    <div class="top-bar">
-      <h1>Ambassador Olanrewaju Falola</h1>
-      <p>Daily Nursing Report - Family Health Portal</p>
-    </div>
-    <div class="refresh-bar">
-      <div class="refresh-info" id="refresh-status">Click the button to check for new reports</div>
-      <button class="refresh-btn" id="refresh-btn" onclick="fetchLive()">Check for New Reports</button>
-    </div>
-    <div id="live-section"></div>
-    <div id="history-section"></div>
-    <div class="footer">
-      <p>Ambassador Olanrewaju Falola &mdash; Family Health Portal</p>
-      <p style="margin-top:6px">For emergencies, contact the care team directly.</p>
-    </div>
-  </div>
+<div class="container">
+<div class="top-bar">
+<h1>Ambassador Olanrewaju Falola</h1>
+<p>Daily Nursing Report - Family Health Portal</p>
+</div>
+<div class="refresh-bar">
+<div class="refresh-info" id="refresh-status">Click the button to check for new reports</div>
+<button class="refresh-btn" id="refresh-btn" onclick="fetchLive()">Check for New Reports</button>
+</div>
+<div id="live-section"></div>
+<div id="history-section"></div>
+<div class="footer">
+<p>Ambassador Olanrewaju Falola &mdash; Family Health Portal</p>
+<p style="margin-top:6px">For emergencies, contact the care team directly.</p>
+</div>
+</div>
 </div>
 <script>
 var PIN='0226';
-var CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQIWWR_VAieTrjboqkegpPjZP43qakEavJfFHaA-lyY5BG1vrAEeBBllehO9gAKLGosI-eIBlXUZKfg/pub?gid=142658432&single=true&output=csv';
+var CSV='https://docs.google.com/spreadsheets/d/1kAmiMbutz4Nvy7dl3LeCiX2EY2Bj5BkMZg6XoyOad-w/export?format=csv&gid=142658432';
 var HDATES=['2/22/2026','2/23/2026','2/24/2026','2/25/2026','2/26/2026','2/27/2026','2/28/2026'];
 var ent='';
 function pp(d){if(ent.length<4){ent+=d;ud();}}
@@ -136,7 +81,7 @@ function parseCSV(text){
   var lines=[];var cur='';var inq=false;
   for(var i=0;i<text.length;i++){
     var c=text[i];
-    if(c==='"'){inq=!inq;}
+    if(c=='"'){inq=!inq;}
     else if(c.charCodeAt(0)===10&&!inq){lines.push(cur);cur='';}
     else if(c.charCodeAt(0)!==13){cur+=c;}
   }
@@ -145,7 +90,7 @@ function parseCSV(text){
     var fields=[];var f='';var iq=false;
     for(var i=0;i<line.length;i++){
       var ch=line[i];
-      if(ch==='"'){iq=!iq;}
+      if(ch=='"'){iq=!iq;}
       else if(ch===','&&!iq){fields.push(f.trim());f='';}
       else{f+=ch;}
     }
